@@ -1,11 +1,11 @@
 section .text
-    global strlen, clap, wstrequ, wstrlen
+    global strlen, _clap, _wstrequ, wstrlen
     extern malloc, print
     extern help, help_lengh, format, format_lengh, file, file_lengh, target, target_lengh, output, output_lengh
     extern Output_File_Info, Input_File, Option
-    extern Option_help
+    extern Option_help, CommandLineEnd
     ;int wstrequ(char* Wdest, const char* Wsrc)
-    wstrequ:
+    _wstrequ:
         push ebp
         mov ebp, esp
         push esi
@@ -24,16 +24,21 @@ section .text
         cmp ebx, eax
         jne .false
         mov ecx, eax
+
         cld
         repe cmpsw
-        je .false
+        jne .false
+
         mov eax, 1
         jmp .return
         .false:
             mov eax, -1
         .return:
+            pop ecx
+            pop ebx
             pop edi
-            pop edi
+            pop esi
+            pop ebp
             ret 8
 
     ;int wstrlen(const char* Wstring)
@@ -75,7 +80,7 @@ section .text
             ret 4
 
     ;void clap(const char* argv[], int argc)   //clap = Command Line Arguments Parser
-    clap:
+    _clap:
         push ebp
         mov ebp,  esp
         push ecx
@@ -88,34 +93,28 @@ section .text
 
         .parser:
             mov edi, dword [esi]
+            push edi 
+            push CommandLineEnd
+            call _wstrequ
+            cmp eax, 1
+            je .return
             .arg:
                 push edi 
                 push Option_help
-                call wstrequ
+                call _wstrequ
                 cmp eax, 1
                 je .Help
+                jne .error
             .next:
                 inc esi
                 loop .parser
+        jmp .return
 
         .Help:
-            push format
-            push format_lengh
-            call print
-
-            push file
-            push file_lengh
-            call print
-
-            push target
-            push target_lengh
-            call print
-
-            push output
-            push output_lengh
-            call print
-
+            mov eax, 42
             jmp .return
+        .error:
+            xor eax, eax
         .return:
             pop edx
             pop edi

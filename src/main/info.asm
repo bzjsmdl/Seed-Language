@@ -30,8 +30,9 @@ section .data
             output db "-o <filename>: Output file", 13, 10, 0
             output_lengh equ $ - output - 1
         ;Option
-        global Option_help
+        global Option_help, CommandLineEnd
         Option_help db 2Dh, 00h, 68h, 00h, 00h, 00h
+        CommandLineEnd dw 0
     
     global Output_File_Info, Input_File
     Output_File_Info:

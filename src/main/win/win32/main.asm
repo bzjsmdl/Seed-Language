@@ -52,8 +52,11 @@ section .text
             cmp dword [cmdll], 1
             je .type_help
             
+            push dword [cmdll]
             push esi
             call clap
+            cmp eax, 42
+            je .type_help
 
             push 0
             call _ExitProcess@4
