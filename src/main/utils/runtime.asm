@@ -1,29 +1,27 @@
 section .text
-    global strlen, _clap, _wstrequ, wstrlen
-    extern malloc, print
+    global strlen, clap, wstrequ, wstrlen
+    extern malloc, print, Wprint
     extern help, help_lengh, format, format_lengh, file, file_lengh, target, target_lengh, output, output_lengh
-    extern Output_File_Info, Input_File, Option
+    extern Output_File_Info, Input_File, Option, NL
     extern Option_help, CommandLineEnd
     ;int wstrequ(char* Wdest, const char* Wsrc)
-    _wstrequ:
+    wstrequ:
         push ebp
         mov ebp, esp
         push esi
         push edi
-        push ebx
         push ecx
         mov esi, dword [ebp + 12]   ;Wsrc
         mov edi, dword [ebp + 8]  ;Wdest
 
         push esi
         call wstrlen
-        mov ebx, eax
+        mov ecx, eax
 
         push edi
         call wstrlen
-        cmp ebx, eax
+        cmp ecx, eax
         jne .false
-        mov ecx, eax
 
         cld
         repe cmpsw
@@ -35,7 +33,6 @@ section .text
             mov eax, -1
         .return:
             pop ecx
-            pop ebx
             pop edi
             pop esi
             pop ebp
@@ -54,10 +51,7 @@ section .text
             add eax, 2
             jmp .c
         .return:
-            push ebx
-            mov ebx, 2
-            div ebx
-            pop ebx
+            shr eax, 1
             pop edi
             pop ebp
             ret 4
@@ -80,28 +74,23 @@ section .text
             ret 4
 
     ;void clap(const char* argv[], int argc)   //clap = Command Line Arguments Parser
-    _clap:
+    clap:
         push ebp
-        mov ebp,  esp
+        mov ebp, esp
         push ecx
         push esi
         push edi
-        push edx
         mov esi, dword [ebp + 8]
         mov ecx, dword [ebp + 12]
-        xor edx, edx
+        inc esi
+        dec ecx
 
         .parser:
             mov edi, dword [esi]
-            push edi 
-            push CommandLineEnd
-            call _wstrequ
-            cmp eax, 1
-            je .return
             .arg:
                 push edi 
                 push Option_help
-                call _wstrequ
+                call wstrequ
                 cmp eax, 1
                 je .Help
                 jne .error
@@ -110,13 +99,10 @@ section .text
                 loop .parser
         jmp .return
 
-        .Help:
-            mov eax, 42
-            jmp .return
+        .Help:nop
         .error:
             xor eax, eax
         .return:
-            pop edx
             pop edi
             pop esi
             pop ecx

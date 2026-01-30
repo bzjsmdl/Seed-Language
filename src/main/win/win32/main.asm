@@ -1,6 +1,6 @@
 section .data
     path_lengh dd 0
-    file_lengh dd 0
+    filelengh dd 0
 
 section .bss
     hOut resd 1
@@ -16,9 +16,11 @@ section .text
     extern _GetStdHandle@4, _WriteConsoleA@20, _ExitProcess@4, _ReadConsoleA@20, _CloseHandle@4
     extern _CreateFileA@28, _ReadFile@20, _VirtualAlloc@16, _GetCommandLineW@0
     extern _CommandLineToArgvW@8
-    extern malloc, print
-    extern strlen, clap
-    extern help, help_lengh
+    extern help, help_lengh, format, format_lengh, file, file_lengh, target, target_lengh, output, output_lengh
+    extern Output_File_Info, Input_File, Option, NL
+    extern Option_help, CommandLineEnd
+    extern strlen, clap, wstrequ, wstrlen
+    extern malloc, print, Wprint
     _main:
         .init:
             push -11
@@ -47,16 +49,16 @@ section .text
             call _CommandLineToArgvW@8
             test eax, eax
             je .error
-            mov esi, eax
+            mov edi, eax
 
             cmp dword [cmdll], 1
             je .type_help
             
             push dword [cmdll]
-            push esi
+            push edi
             call clap
-            cmp eax, 42
-            je .type_help
+            test eax, eax
+            je .e
 
             push 0
             call _ExitProcess@4
@@ -64,7 +66,28 @@ section .text
             push help
             push help_lengh
             call print
+
+            push format
+            push format_lengh
+            call print
+
+            push file
+            push file_lengh
+            call print
+
+            push target
+            push target_lengh
+            call print
+
+            push output
+            push output_lengh
+            call print
+
             jmp .error
+        .e:
+            push NL
+            push 2
+            call print
         .error:
             push 1
             call _ExitProcess@4
