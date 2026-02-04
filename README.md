@@ -1,7 +1,7 @@
 # Seed-Language
 ## Introduce Seed
  Seed is a open-source programming language.<br>
- Its mian idea: More <strong>abstract</strong> but <strong>transparent</strong>
+ Its mian idea: <strong>abstract</strong> but <strong>transparent</strong>
 <li>
     <strong>Structure Assembly</strong>:<br>
     To move 10 into EAX:<br> Assembly: <code><strong>mov eax, 10  ; Intel  (AT&T: mov $10, %eax)</strong></code><br> Seed: <code><strong>10 => eax;</strong></code>.
