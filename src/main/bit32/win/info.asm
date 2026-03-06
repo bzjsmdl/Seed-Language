@@ -8,8 +8,11 @@ section .data
             format db "Fromat: seed <Target> <Input File> <Output File> <Option>", 13, 10, "E.G.: seed win32 a.seed a.asm -h",13, 10, 0
             format_lengh equ $ - format - 1
             
-    global NL
+    global NL, NULL_Wide_Character, Zero_Wide_Character, char
     NL db 13, 10
+    NULL_Wide_Character dw 0
+    Zero_Wide_Character dw 0030h
+    char dd 0
 
     global CompilerTable
     CompilerTable:
