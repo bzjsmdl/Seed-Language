@@ -1,5 +1,5 @@
 section .text
-    global strlen, wstrequ, wstrlen, printHelp, strcpy, wstrcpy, isalnum, isprint
+    global strlen, wstrequ, wstrlen, printHelp, strcpy, wstrcpy, isalnum
     extern malloc, print, Wprint
     extern help, help_lengh, format, format_lengh, file, file_lengh, target, target_lengh, output, output_lengh
     extern Output_File_Info, Input_File, Option, NL
@@ -184,7 +184,6 @@ section .text
         cmp al, '0'
         jl .false
         cmp al, '9'
-        jg .false
         jng .true
 
         xor al, 0x20
@@ -196,30 +195,6 @@ section .text
         .true:
             mov eax, 1
             jmp .return
-        .false:
-            xor eax, eax
-        .return:
-            pop esi
-            pop ebp
-            ret 4
-    isprint:
-        push ebp
-        mov ebp, esp
-        push esi
-        mov esi, dword [ebp + 8]
-        mov al, byte [esi]
-        cmp al, '~'
-        jg .false
-        cmp al, 9
-        jne .false
-        cmp al, 10
-        jne .false
-        cmp al, 13
-        jne .false
-        cmp al, ' '
-        jl .false
-        mov eax, 1
-        jmp .return
         .false:
             xor eax, eax
         .return:

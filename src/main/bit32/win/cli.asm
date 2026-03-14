@@ -34,8 +34,8 @@ section .text
             call _CommandLineToArgvW@8
             mov esi, eax
             mov dword [argv], esi
-        
-            cmp dword [argc], 1
+
+            cmp dword [argv], 1
             je .type_help
             mov ecx, 1
         .parser:
@@ -47,11 +47,7 @@ section .text
             call wstrequ
             cmp eax, 1
             je .next
-            push edx
-            push Zero_Wide_Character
-            call wstrequ
-            cmp eax, 1
-            je .next
+
             push edx
             push Zero_Wide_Character
             call wstrequ
@@ -96,8 +92,9 @@ section .text
             mov dword [CompilerTable + 4], edx
             jmp .next
         .noErr:
-            xor eax, eax
+            mov eax, 1
             ret
         .MissingArgumentError:
-            mov eax, 2
+            mov edx, 2
+            xor eax, eax
             ret

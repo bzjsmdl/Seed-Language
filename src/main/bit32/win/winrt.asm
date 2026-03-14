@@ -1,6 +1,6 @@
 section .text
-    global malloc, print, Wprint, free, palloc
-    extern _VirtualAlloc@16, _WriteConsoleA@20, _GetStdHandle@4, _WriteConsoleW@20, _VirtualFree@12
+    global malloc, print, Wprint, free, palloc, fopen
+    extern _VirtualAlloc@16, _WriteConsoleA@20, _GetStdHandle@4, _WriteConsoleW@20, _VirtualFree@12, _CreateFileW@28
     extern char
     malloc:
         push ebp
@@ -92,3 +92,23 @@ section .text
         .return:
             pop ebp
             ret 4
+    
+    fopen:
+        push ebp
+        mov ebp, esp
+        push esi
+        mov esi, dword [ebp + 8]
+        mov eax, dword [ebp + 12]
+
+        push 0
+        push eax
+        push 4
+        push 0
+        push 0
+        push 0xC0000000
+        push esi
+        call _CreateFileW@28
+
+        pop esi
+        pop ebp
+        ret 8
