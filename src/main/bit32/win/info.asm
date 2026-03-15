@@ -1,6 +1,6 @@
 section .data
     ;Command Line
-        ;Help
+        Help:
             global help, help_lengh, format, format_lengh
             help db "-h: To get help", 13, 10, 0
             help_lengh equ $ - help - 1
@@ -19,3 +19,9 @@ section .data
         dd 0    ;Input_File
         dd 0    ;Output_File
         db 0    ;Target
+
+    global AM, AML
+    ErrorTip:
+        AM db "AllocMemoryError: The Seed-Language Compiler throw an error of alloc memory. It's not your fault."
+        AML equ $ - AM
+

@@ -1,4 +1,5 @@
 ;enum Error:
-global InvalidCharacterError, UnknowError
+global InvalidCharacterError, UnknowError, AllocMemoryError
 InvalidCharacterError equ 1
-UnknowError           equ 2
+AllocMemoryError      equ 2
+UnknowError           equ 3

@@ -32,12 +32,13 @@ section .text
         push dword [ebp + 12]
         push eax
         call _WriteConsoleA@20
+        jmp .return
 
         .error:
             xor eax, eax
-
-        pop ebp
-        ret 8
+        .return:
+            pop ebp
+            ret 8
     Wprint:
         push ebp
         mov ebp, esp

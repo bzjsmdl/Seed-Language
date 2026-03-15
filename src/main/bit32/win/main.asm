@@ -23,6 +23,8 @@ section .text
     extern strlen, clap, wstrequ, wstrlen, printHelp
     extern malloc, print, Wprint, fopen
     extern cli, state
+    extern InvalidCharacterError, UnknowError, AllocMemoryError
+    extern AM, AML
     _main:
         .init:
             push -11
@@ -105,12 +107,14 @@ section .text
         
         .main:
             call state
-            test eax, eax
-            je .error
+            cmp eax, 1
+            jne .error
 
             push edi
             push dword [file_lengh]
             call print
+
+            call 
 
         .no_error:
             push dword [InFile]
@@ -127,23 +131,32 @@ section .text
         .error:
             call _GetLastError@0
             mov dword [error], eax
-            push eax
-            push wsad
-            call _printf
-            add esp, 8
-            push edx
-            push wsad
-            call _printf
-            add esp, 8
+
+            cmp edx, AllocMemoryError
+            je .amErr
+
             .err:
+                push dword [error]
+                push wsad
+                call _printf
+                add esp, 8
+                
                 push dword [InFile]
                 call _CloseHandle@4
 
                 push dword [OutFile]
                 call _CloseHandle@4
-                
+                    
                 push dword [cliPtr]
                 call _LocalFree@4
 
                 push 1
                 call _ExitProcess@4
+            .amErr:
+                push 0
+                push char
+                push AML
+                push AM
+                push dword [hErr]
+                call _WriteConsoleA@20
+                jmp .err
