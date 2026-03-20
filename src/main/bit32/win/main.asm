@@ -22,7 +22,7 @@ section .text
     extern NL, CompilerTable, char
     extern strlen, clap, wstrequ, wstrlen, printHelp
     extern malloc, print, Wprint, fopen
-    extern cli, state
+    extern cli, state, scanner
     extern InvalidCharacterError, UnknowError, AllocMemoryError
     extern AM, AML
     _main:
@@ -114,7 +114,9 @@ section .text
             push dword [file_lengh]
             call print
 
-            call 
+            call scanner
+            cmp eax, 1
+            jne .error
 
         .no_error:
             push dword [InFile]

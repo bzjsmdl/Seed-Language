@@ -4,6 +4,10 @@ global Character, Delimter, NotCharacter, Special_Delimter
     Delimter         equ '1'
     Special_Delimter equ '0'
     NotCharacter     equ 'F'
+section .data
+    global stateArrPtr
+    stateArrPtr dd 0
+
 section .text
     global state
     extern file_lengh, src
@@ -73,6 +77,7 @@ section .text
         .return:
             mov eax, 1
             xor edx, edx
+            mov edi, dword [stateArrPtr]
             ret
         .CharBlock:
             mov byte [edi + ebx], Character
