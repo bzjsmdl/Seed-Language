@@ -14,5 +14,3 @@
     <strong>Near Assembly</strong>:<br>
        In other high-level languages there are many control keywords, such as <strong>if</strong>, <strong>else</strong>, <strong>switch</strong>, but in Seed the primary comparison instruction is <strong>cmp</strong>.
 </li>
-
-### Another thing: this's seedc-old code. Please go to <a href = "https://github.com/bzjsmdl/Seed-Language">https://github.com/bzjsmdl/Seed-Language<\a>...
