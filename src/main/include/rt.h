@@ -5,7 +5,8 @@
 
 void help();
 unsigned long int flen(FILE* src);
-int Strlen64(const char* string);
-int Strequ64(const char* str1, const char* str2);
+void PrintError(int state);
+
+unsigned char* state(char* text, unsigned long long int length);
 
 #endif

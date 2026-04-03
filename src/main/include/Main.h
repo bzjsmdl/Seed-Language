@@ -5,15 +5,25 @@
 #include <stdlib.h>
 
 // Asm Function
-extern __stdcall int Strlen32(const char* string);
-extern __stdcall int Strequ32(const char* str1, const char* str2);
+extern __stdcall int Strlen(const char* string);
+extern __stdcall int Strequ(const char* str1, const char* str2);
+extern __stdcall int Isalnum(char* ch);
+extern __stdcall int Ispunct(char* ch);
 
 // Const
 enum error {
     CommandLineMissingArgument = 1,
-    AllocMemoryError
+    AllocMemoryError,
+    CannotReadFile,
+    CannotOpenFile
 };
 
+enum CharacterState{
+    Special_Delimter,
+    Delimter,
+    Character,
+    NotCharacter
+};
 //Structure
 typedef struct CompilerTable {
     const char* Input_File;
