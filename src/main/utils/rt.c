@@ -15,8 +15,9 @@ unsigned long long int flen(FILE* src) {
 void PrintError() {
     if (err = CannotOpenFile) printf(CNOF);
     else if (err == AllocMemoryError) printf(AM);
-    else if (err == UnknowLacolLabel) printf("UnknowLacolLabel");
-    else if (err == DifinedSectionNameError) printf("DifinedSectionNameError");
+    else if (err == UnknowLacolLabel) printf(ULL);
+    else if (err == DifinedSectionNameError) printf(DSNE);
+    else if (err = CommandLineMissingArgument) printf(CLAM);
     else printf("Unknow Error...");
 }
 

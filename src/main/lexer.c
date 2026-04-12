@@ -17,7 +17,7 @@ Token* Lexer(unsigned long long int length, char* text) {
 	while (i < length) {
 		if (text[i] == '\n') line++;
 		if (Arr[i] != a[0] && i - 1 < length) {
-			if (a == Quote) {
+			if (a[0] == Quote) {
 				char* b = Strchr(length - i, text + a[1], text + i);
 				p->len = b - text + 1;
 				p->texts = text + a[1];
@@ -30,7 +30,7 @@ Token* Lexer(unsigned long long int length, char* text) {
 				a[0] = Arr[i];
 				j = 0;
 			}
-			else if (a == Character) {
+			else if (a[0] == Character) {
 				p->len = j + 1;
 				p->texts = text + a[1];
 				p->line = line;

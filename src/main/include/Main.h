@@ -80,17 +80,22 @@ enum CharacterState {
 
 // Info
     // Help
-        #define fromat "Fromat: seed <Target> <Input File> <Output File> <Option>\nE.G.: seed win32 a.seed a.asm -h\n\0"
+        #define fromat "Format: seed <Target> <Input File> <Output File> <Option>\nE.G.: seed win32 a.seed a.asm -h\n\0"
         #define option "-h / --help: To get help\n"
     // ErrorTips
         #define AM "Seed-Language Compiler: Sorry... I throw an error of alloc memory. It's not your fault.\n\
         I have an advice --\n\
-        you can try again or delate me...\0"
-        #define CNOF "Seed-Language Compiler: Ah! I coan't open the file.\nNote:\
+        you can try again or delate me...(TwT)\0"
+        #define CNOF "Seed-Language Compiler: Ah! I can't open the file.\nNote:\
     1. If you didn't create the file or its path, please created it;\
-    2. The file may be occupied by another promgram, systam, or network, or the file is currently running;\
+    2. The file may be occupied by another program, systam, or network, or the file is currently running;\
     3. More and More..."
-
+        #define CLAM "Seed-Language Compiler: Emm... May I say that I can't pick the command line arguments? I have some tips:\n\
+    1.If the command line used placeholders(- / 0), you need to write another path:\n\
+    \tseed - 0 0 => seed asm d:/0.seed d:/0.asm\n\
+    2.Use another tools to convert it to my command-line format\0"
+        #define DSNE "Seed-Language Compiler: Your section name doesn't meet the standard. I think that a dot is added before the name, right? So, please delate the dot~"
+        #define ULL "Seed-Language Compiler: Why did you add a dot before a name(identifer)? I can't understand. So, please delate the dot~"
 // Macro
     #define isalpha(ch) ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'))
     #define isnum(ch) ((ch >= '0' && ch <= '9'))

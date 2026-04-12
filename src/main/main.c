@@ -11,10 +11,15 @@ int main(int argc, const char** argv) {
 		goto noErr;
 	}
 	for (int i = 1; i < argc; i++) {
+		if (Strequ(argv[i], "0") || Strequ(argv[i], "-")) continue;
 		if (i == 1) table->Target = argv[i];
 		else if (i == 2) table->Input_File = argv[i];
 		else if (i == 3) table->Output_File = argv[i];
-		if (Strequ("-h", argv[i])) help();
+		if (Strequ("-h", argv[i]) || Strequ("--help", argv[i])) help();
+	}
+	if (table->Target == NULL || table->Input_File == NULL || table->Output_File == NULL) {
+		err = CommandLineMissingArgument;
+		goto Err;
 	}
 	FILE* src = fopen(table->Input_File, "r");
 	if (src == NULL) {
