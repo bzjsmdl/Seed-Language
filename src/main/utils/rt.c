@@ -1,16 +1,25 @@
-#include "../include/rt.h"
+#include "../include/Main.h"
+extern unsigned int err;
 void help() {
     printf(fromat);
     printf(option);
 }
-unsigned long int flen(FILE* src) {
-    unsigned long int length = 0;
+unsigned long long int flen(FILE* src) {
+    unsigned long long int length = 0;
     fseek(src, 0, SEEK_END);
     length = ftell(src);
     fseek(src, 0, SEEK_SET);
     return length;
 }
 
-void PrintError(int state) {
-    if (CannotReadFile) printf("CannotReadFile");
+void PrintError() {
+    if (err = CannotOpenFile) printf(CNOF);
+    else if (err == AllocMemoryError) printf(AM);
+    else if (err == UnknowLacolLabel) printf("UnknowLacolLabel");
+    else if (err == DifinedSectionNameError) printf("DifinedSectionNameError");
+    else printf("Unknow Error...");
+}
+
+void print(char* str, unsigned long long int len) {
+    for (unsigned long long int i = 0; i < len; i++) printf("%c", str[i]);
 }
