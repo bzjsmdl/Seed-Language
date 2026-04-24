@@ -1,5 +1,64 @@
 section .text
-	global Strlen, Strequ, Strcpy, clear, Strchr, Memequ
+	global Strlen, Strequ, Strcpy, clear, Strchr, Memequ ;outter -> C
+	global Isalpha, Isnum, Ispunct ;inner -> Asm
+	; int Isalpha(char* ch)
+	Isalpha:
+		mov al, byte [rcx]
+		cmp al, 'A'
+		jl .false
+		cmp al 'Z'
+		jng .true
+		cmp al, 'a'
+		jl .false
+		cmp al 'z'
+		jng .true
+		.false:
+			xor eax, eax
+			jmp .return
+		.true:
+			mov eax, 1	
+		.return:
+			ret
+	; int Isnum(char* ch)
+	Isnum:
+		mov al, byte [rcx]
+		cmp al, '0'
+		jl .false
+		cmp al '9'
+		jng .true
+		.false:
+			xor eax, eax
+			jmp .return
+		.true:
+			mov eax, 1
+		.return:
+			ret
+	; int Ispunct(char* ch)
+	Ispunct:
+		mov al, byte [rcx]
+		cmp al, '!'
+		jl .false
+		cmp al '/'
+		jng .true
+		cmp al, ':'
+		jl .false
+		cmp al '@'
+		jng .true
+		cmp al, '['
+		jl .false
+		cmp al "`"
+		jng .true
+		cmp al, '{'
+		jl .false
+		cmp al "~"
+		jng .true
+		.false:
+			xor eax, eax
+			jmp .return
+		.true:
+			mov eax, 1
+		.return:
+			ret
 	; int Strlen(const char* string)
 	Strlen:
 		xor rax, rax

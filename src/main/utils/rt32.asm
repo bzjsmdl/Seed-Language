@@ -1,5 +1,82 @@
 section .text
-	global _Strlen@4, _Strequ@8, _Strcpy@12, _Clear@8, _Strchr@12, _Memequ@12
+	global _Strlen@4, _Strequ@8, _Strcpy@12, _Clear@8, _Strchr@12, _Memequ@12 ;outter -> c
+	global Isalpha, Isnum, Ispunct ;inner -> Asm
+	; int Isalpha(char* ch)
+	Isalpha:
+		push ebp
+		mov ebp, esp
+		push esi
+		mov esi, dword [ebp + 8]
+		mov al, byte [esi]
+		cmp al, 'A'
+		jl .false
+		cmp al 'Z'
+		jng .true
+		cmp al, 'a'
+		jl .false
+		cmp al 'z'
+		jng .true
+		.false:
+			xor eax, eax
+			jmp .return
+		.true:
+			mov eax, 1	
+		.return:
+			pop esi
+			pop ebp
+			ret 4
+	; int Isnum(char* ch)
+	Isnum:
+		push ebp
+		mov ebp, esp
+		push esi
+		mov esi, dword [ebp + 8]
+		mov al, byte [esi]
+		cmp al, '0'
+		jl .false
+		cmp al '9'
+		jng .true
+		.false:
+			xor eax, eax
+			jmp .return
+		.true:
+			mov eax, 1
+		.return:
+			pop esi
+			pop ebp
+			ret 4
+	; int Ispunct(char* ch)
+	Ispunct:
+		push ebp
+		mov ebp, esp
+		push esi
+		mov esi, dword [ebp + 8]
+		mov al, byte [esi]
+		cmp al, '!'
+		jl .false
+		cmp al '/'
+		jng .true
+		cmp al, ':'
+		jl .false
+		cmp al '@'
+		jng .true
+		cmp al, '['
+		jl .false
+		cmp al "`"
+		jng .true
+		cmp al, '{'
+		jl .false
+		cmp al "~"
+		jng .true
+		.false:
+			xor eax, eax
+			jmp .return
+		.true:
+			mov eax, 1
+		.return:
+			pop esi
+			pop ebp
+			ret 4
 	; int Strlen(const char* string)
 	_Strlen@4:
 		push ebp
