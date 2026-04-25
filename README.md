@@ -40,12 +40,12 @@ In NASM(haven't macro):
     */
 ```
 ## Q & A
-Q: Can I submit a PR for the language?<br>
-A: **No**. Because I'm worried that you'll **destory our language's uniqueness** and my code is **very bad**. But you still can **fork it down** or **provide issues**.
-<br>
-Q: Do the language have docs?
-A: No. But I try faster.
-<br>
+### Q: Can I submit a PR for the language?<br>
+#### A: **No**. Because I'm worried that you'll **destory our language's uniqueness** and my code is **very bad**. But you still can **fork it down** or **provide issues**.
+
+### Q: Do the language have docs?
+#### A: No. But I try faster.
+
 ## Another thing
 - If you have any questions that haven't been asked here(Q & A), you can send a email to bzjsmdl88@qq.com or bzjsmdl@outlook.com.
 - I translate ```README.md``` by means of ```Deepseek``` and ```GitHub Copilot```(I use VSCode to write the first README.md) else...
