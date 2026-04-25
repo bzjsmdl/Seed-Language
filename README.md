@@ -9,7 +9,7 @@
 - ### <strong>Near Assembly</strong>:<br>
     In other high-level languages there are many control keywords, such as <strong>if</strong>, <strong>else</strong>, <strong>switch</strong>, but in Seed the primary comparison instruction is <strong>cmp</strong>.
 #### <br>Example:<br>
-    ```seed
+```seed
     // PLAN!!!
     #macro<@res> equ(%%pir a, %%pir b, %%lbl l) {
     // %%pir: Pointer, Integer(count immediately or data in memory) and Register
@@ -26,7 +26,8 @@
         loc end: nop;
       }
     }
-    /*In NASM(haven't macro):
+    /*
+In NASM(haven't macro):
     section .text
     global main
     main:
@@ -37,7 +38,7 @@
     .a: xor eax, eax
     .end: nop
     */
-    ```
+```
 ## Q & A
 Q: Can I submit a PR for the language?<br>
 A: **No**. Because I'm worried that you'll **destory our language's uniqueness** and my code is **very bad**. But you still can **fork it down** or **provide issues**.
