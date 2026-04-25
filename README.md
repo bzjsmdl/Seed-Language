@@ -10,22 +10,22 @@
     In other high-level languages there are many control keywords, such as <strong>if</strong>, <strong>else</strong>, <strong>switch</strong>, but in Seed the primary comparison instruction is <strong>cmp</strong>.
 #### <br>Example:<br>
 ```seed
-    // PLAN!!!
-    #macro<@res> equ(%%pir a, %%pir b, %%lbl l) {
-    // %%pir: Pointer, Integer(count immediately or data in memory) and Register
-    // %%lbl: LaBeL(label)
-      cmp %a, %b;
-      je %l;
-    }
-    sec .text {
-      pub main { // Windows64 entry
-        10 => rax;
-        equ rax, 10, a;
-        jmp end;
-        loc a: eax ^ eax;
-        loc end: nop;
-      }
-    }
+// PLAN!!!
+#macro<@res> equ(%%pir a, %%pir b, %%lbl l) {
+// %%pir: Pointer, Integer(count immediately or data in memory) and Register
+// %%lbl: LaBeL(label)
+   cmp %a, %b;
+   je %l;
+}
+sec .text {
+  pub main { // Windows64 entry
+    10 => rax;
+    equ rax, 10, a;
+    jmp end;
+    loc a: eax ^ eax;
+    loc end: nop;
+  }
+}
     /*
 In NASM(haven't macro):
     section .text
