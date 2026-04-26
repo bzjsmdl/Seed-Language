@@ -1,4 +1,14 @@
 # Seed-Language
+## Project Structure
+```text
+                   repositoriy
+                   /         \
+                 src         wedsite
+             (C,Assembly,Seed) (HTML/CSS/Javascript)
+               /      \         /    \
+             main     stdlib   docs  (some code)
+        (C, Assembly)  (Seed)  (HTML)
+```
 ## Introduce Seed
  Seed is a open-source programming language.<br>
  Its mian idea: <strong>abstract</strong> but <strong>transparent</strong>
@@ -45,6 +55,9 @@ In NASM(haven't macro):
 
 ### Q: Do the language have docs?
 #### A: No. But I try faster.
+
+### Q: Do the language have a wedsite?
+#### A: Yes!! Today(2026.4.26) it's online!!! Please go to [https://seed-lang.pages.dev](https://seed-lang.pages.dev).
 
 ## Another thing
 - If you have any questions that haven't been asked here(Q & A), you can send a email to bzjsmdl88@qq.com or bzjsmdl@outlook.com.
