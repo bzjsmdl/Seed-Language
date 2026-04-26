@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed Docs: Quick Start</title>
+</head>
+<body>
+    <header id="head-SEEDLANG"></header>
+    <h1>Quick Start</h1>
+    <h2>How to download Seed?</h2>
+    <p>Go to <a href="https://github.com/bzjsmdl/Seed-Language/releases">https://github.com/bzjsmdl/Seed-Language/releases</a> to download it.</p>
+    <h2>Hello, World!</h2>
+    <p><pre><code class="language-seed">// hello.seed:
+    #import &lt;io.sdh&gt;
+    sec .data {
+        s: byte &quot;Hello, World!&quot;;
+    }
+    sec .text {
+        pub main{  // Windows 64
+            print s;
+        }
+    }</code></pre><br> Compile it: <pre><code class="language-bash">seed -f ./hello.seed -o pe ./hello.exe
+    ./hello.exe</code></pre><br> Output:</p>
+    <pre><code class="language-bash">Hello, World!</code></pre>
+    <h3>Meaning</h3>
+    <p>File <code>hello.seed</code> difined two sections(.text, .data). 
+        In the Data Segment, I difined a string <code>s</code>. 
+        In the Text Segment, I deined a label of entry pinter <code>main</code>. 
+        The label <code>main</code> called a macro <code>print</code> of standard library <code>io.sdh</code></p>
+    <footer id="end-SEED"></footer>
+</body>
+</html>

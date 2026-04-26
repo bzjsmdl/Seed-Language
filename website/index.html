@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" id="web">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed Language</title>
+    <link rel="stylesheet" href="gStyle.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="bg">
+    <header id="head-SEEDLANG">
+            <h1 id="title"><a href="index.html">Seed</a></h1>
+        <ul id="option" class="option">
+            <li><a href="https://github.com/bzjsmdl/Seed-Language/releases"><img src="pic/dl.png" alt="Download" width="60px" height="60px"></a></li>
+            <li><a href="#" onclick="plan()"><img src="pic/docs.png" alt="Docs" width="60px" height="60px"></a></li>
+            <li><a href="#" onclick="plan()"><img src="pic/set.png" alt="Settings" width="60px" height="60px"></a></li>
+        </ul>
+    </header>
+    <main>
+        <div id="first" class="first">
+            <h2><strong>Abstract</strong> but <strong>Transparent</strong></h2>
+        </div>
+        <section class="feature">
+            <h2>Feature</h2>
+            <div class="fl">
+                <div class="sa">
+                    <img src="pic/sa.png" alt="Near Assembly" width="325px" height="325px">
+                    <h3><strong>Structure Assembly</strong></h3>
+                    <p>To move 10 into EAX:<br>Assembly: mov eax, 10  ; Intel  (AT&T: mov $10, %eax)<br>Seed: 10 => eax;</p>
+                </div>
+                <div class="sm">
+                    <img src="pic/sm.png" alt="Near Assembly" width="325px" height="325px">
+                    <h3><strong>Strong Macro</strong></h3>
+                    <p>In Seed we have several macro attributes.<br>
+                        They're @text, @res (not optimized),<br>@resa (like C's inline assembly), and @null</p>
+                </div>
+                <div class="na">
+                    <img src="pic/na.png" alt="Near Assembly" width="325px" height="325px">
+                    <h3><strong>Near Assembly</strong></h3>
+                    <p>In other high-level languages there are many control keywords,<br>such as if, else, switch,<br>but in Seed the primary comparison instruction is cmp</p>
+                </div>
+            </div>
+        </section>
+        <section class="start" id="start">
+            <a id="start" href="docs/qs.html" onclick="plan()">Let's start!</a>
+        </section>
+    </main>
+    <footer id="end-SEED">
+        <p>Copyright © 2025(design)~2026(create) bzjsmdl. All Rights Reserved.</p>
+        <p class="github"><a href="https://github.com/bzjsmdl/Seed-Language"><img src="pic/github.png" alt="github" width="30px" height="30px"></a></p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
