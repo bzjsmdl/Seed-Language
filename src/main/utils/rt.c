@@ -14,6 +14,7 @@ unsigned long long int flen(FILE* src) {
 void PrintError(const char* path, unsigned long long int line) {
 	if (err == CannotOpenFile) {
 		printf("%s", CNOF);
+		printf("(Path: %s)\n", path);
 	}
 	else if (err == AllocMemoryError) {
 		printf("%s", AM);

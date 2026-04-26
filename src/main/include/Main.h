@@ -27,7 +27,6 @@ typedef struct token {
 
 	// Lexer
 		Token* Lexer(unsigned long long int length, char* text);
-		extern char* state(unsigned long long int length, char* text);
 		#if __SIZEOF_POINTER__ == 4
 			extern __stdcall char* state(unsigned int length, char* text);
 		#elif __SIZEOF_POINTER__ == 8
@@ -58,20 +57,18 @@ enum error {
 	AllocMemoryError,
 	CannotOpenFile,
 	DifinedSectionNameError,
-	UnknowIdentifer
+	UnknowIdentifer,
+	BigFileWarnning
 };
 
-enum ReadTarget{
-	Seed,
-	IR
-};
 enum TokenType {
 	Keyword,
 	Identifer,
 	Separator,
+	Data,
+
 	Preprocess_Directive,
 	Placeholder,
-	Data,
 	String,
 	Section,
 	LocalLabel,

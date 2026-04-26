@@ -2,7 +2,6 @@
 unsigned int err = NoError;
 unsigned long long int Line = 0;
 char* DefaultPath = "a.asm";
-char defaultRT = Seed;
 CompilerTable* table;
 int main(int argc, const char** argv) {
 	char* text = NULL;
@@ -23,9 +22,8 @@ int main(int argc, const char** argv) {
 				goto noErr;
 			}
 			else if (Strequ(argv[i], "-f") || Strequ(argv[i], "--file")) {
-				if (i + 2 < argc && !(Strequ(argv[i + 1], "-\0") || Strequ(argv[i + 2], "-\0"))) {
-					defaultRT = (Strequ(argv[i + 1], "ir")) ? IR : Seed;
-					table->Input_File = argv[i + 2];
+				if (i + 1 < argc && !(Strequ(argv[i + 1], "-\0"))) {
+					table->Input_File = argv[i + 1];
 					i++;
 				}
 				else {
@@ -61,19 +59,10 @@ int main(int argc, const char** argv) {
 		goto clear;
 	}
 	fread(text, length, 1, src);
-	if (defaultRT == IR) {
-		IRtranS(text);
+	char* s = state(length, text);
+	for (unsigned int i = 0; i < length; i++) {
+		printf("(%c) : %d\n", text[i], s[i]);
 	}
-	Token* p = Lexer(length, text);
-	// Token* head = p;
-	// while (p->next != NULL) {
-	// 	printf("Text: ");
-	// 	print(p->texts, p->len);
-	// 	printf("\nlen: %d\n", p->len);
-	// 	printf("Type: %d\n", p->type);
-	// 	printf("Line: %d\n\n", p->line);
-	// 	p = p->next;
-	// }
 	clear:
 		fclose(src);
 		if (text != NULL) free(text);

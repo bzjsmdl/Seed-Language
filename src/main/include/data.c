@@ -15,12 +15,10 @@ char* DSNE = {"Seed-Language Compiler: Your section name doesn't meet the standa
 char* UI = {"Seed-Language Compiler: Why did you add a dot before a name(identifer)? I can't understand. So, please delate the dot~"}; 
 char* chelp = {"Seed-Language Compiler: If you want to use me to compile some seed-file, you must know my command-line format. Give you a my-command-line-format table:\n\
 	-h / --help: To get help;\n\
-	-f / --file <ReadFromat> <FilePath>: Read the <FilePath>\n\
-		<ReadFromat>: There're some options of the readfromat, like seed, ir...\n\
+	-f / --file <FilePath>: Read the <FilePath>\n\
 	-o / --output <Fromat> <FilePath>: Output the <FilePath>\n\
 		<FilePath>: If no finished, default path is \"a.asm\";\n\
 		<Fromat>: There're some options of the fromat, like pe, elf, asm...\0"};
-char* CTCBSS = {"Seed-Language Compiler: I'm sorry to break your compilation...\n\
-But you can take a look at my implemention:\n\
-	(https://github.com/bzjsmdl/Seed-Language/tree/main/src/main/lexer/state32.asm or https://github.com/bzjsmdl/Seed-Language/tree/main/src/main/lexer/state64.asm)\n\
-Now, my memory in BSS Segment is used up. So, do you want to alloc some more(alloc 64MB)?(y/n)\0"};
+char* BFW = {"Seed-Language Compiler: Emm... Your file size is too big. The copilation may be wrong. Do you want to continue?(y/n)"};
+char* OK = {"\nSeed-Language Compiler: OK\n\0"};
+char* UN = {"Seed-Language Compiler: I can't understand... Say agian!(y/n)\0"};

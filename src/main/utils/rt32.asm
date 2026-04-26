@@ -10,11 +10,11 @@ section .text
 		mov al, byte [esi]
 		cmp al, 'A'
 		jl .false
-		cmp al 'Z'
+		cmp al, 'Z'
 		jng .true
 		cmp al, 'a'
 		jl .false
-		cmp al 'z'
+		cmp al, 'z'
 		jng .true
 		.false:
 			xor eax, eax
@@ -34,7 +34,7 @@ section .text
 		mov al, byte [esi]
 		cmp al, '0'
 		jl .false
-		cmp al '9'
+		cmp al, '9'
 		jng .true
 		.false:
 			xor eax, eax
@@ -54,19 +54,19 @@ section .text
 		mov al, byte [esi]
 		cmp al, '!'
 		jl .false
-		cmp al '/'
+		cmp al, '/'
 		jng .true
 		cmp al, ':'
 		jl .false
-		cmp al '@'
+		cmp al, '@'
 		jng .true
 		cmp al, '['
 		jl .false
-		cmp al "`"
+		cmp al, "`"
 		jng .true
 		cmp al, '{'
 		jl .false
-		cmp al "~"
+		cmp al, "~"
 		jng .true
 		.false:
 			xor eax, eax
