@@ -45,8 +45,6 @@ section .text
 			call Ispunct
 			test rax, rax
 			jne .d
-			cmp byte [rdx], ' '
-			je .s
 			mov byte [rdi + rbx], NotCharacter
 		.next:
             pop rcx
@@ -69,9 +67,6 @@ section .text
 			jmp .next
 		.d:
 			mov byte [rdi + rbx], Delimter
-			jmp .next
-		.s:
-			mov byte [rdi + rbx], Space
 			jmp .next
 		.bfw:
 			mov dword [err], 6 ; 6 = BigFileWarnning

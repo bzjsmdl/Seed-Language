@@ -11,7 +11,7 @@ typedef struct CompilerTable {
 	const char* Target;
 }CompilerTable;
 
-typedef struct tokencenter {
+typedef struct token {
 	char* texts;
 	unsigned long long int len;
 	int ftype;
@@ -70,12 +70,13 @@ enum error {
 	BigFileWarnning
 };
 
-enum TokenType {
+enum FatherType {
 	Keyword,
 	Identifer,
 	Separator,
-	Data,
-
+	Data
+};
+enum ChildType {
 	Preprocess_Directive,
 	Placeholder,
 	String,
@@ -89,8 +90,7 @@ enum CharacterState {
 	Delimter,
 	Quote,
 	Number,
-	NotCharacter,
-	Space
+	NotCharacter
 };
 
 // Info

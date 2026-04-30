@@ -49,8 +49,6 @@ section .text
 			call Ispunct
 			test eax, eax
 			jne .d
-			cmp byte [edx], ' '
-			je .s
 			mov byte [edi + ebx], NotCharacter
 		.next:
 			inc ebx
@@ -75,9 +73,6 @@ section .text
 			jmp .next
 		.d:
 			mov byte [edi + ebx], Delimter
-			jmp .next
-		.s:
-			mov byte [edi + ebx], Space
 			jmp .next
 		.bfw:
 			mov dword [_err], 6 ; 6 = BigFileWarnning
