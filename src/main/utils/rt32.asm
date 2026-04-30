@@ -111,7 +111,7 @@ section .text
 		call _Strlen@4
 		mov ecx, eax
 
-		push esi
+		push edi
 		call _Strlen@4
 		cmp ecx, eax
 		jne .false
