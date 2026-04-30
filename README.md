@@ -20,7 +20,7 @@
     In other high-level languages there are many control keywords, such as <strong>if</strong>, <strong>else</strong>, <strong>switch</strong>, but in Seed the primary comparison instruction is <strong>cmp</strong>.
 #### <br>Example:<br>
 ```seed
-// PLAN!!!
+// PLAN!!! WILL CHANDE THE GRAMMER
 #macro<@res> equ(%%pir a, %%pir b, %%lbl l) {
 // %%pir: Pointer, Integer(count immediately or data in memory) and Register
 // %%lbl: LaBeL(label)
