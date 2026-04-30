@@ -6,17 +6,17 @@ section .text
 		mov al, byte [rcx]
 		cmp al, 'A'
 		jl .false
-		cmp al 'Z'
+		cmp al, 'Z'
 		jng .true
 		cmp al, 'a'
 		jl .false
-		cmp al 'z'
+		cmp al, 'z'
 		jng .true
 		.false:
-			xor eax, eax
+			xor rax, rax
 			jmp .return
 		.true:
-			mov eax, 1	
+			mov rax, 1	
 		.return:
 			ret
 	; int Isnum(char* ch)
@@ -24,13 +24,13 @@ section .text
 		mov al, byte [rcx]
 		cmp al, '0'
 		jl .false
-		cmp al '9'
+		cmp al, '9'
 		jng .true
 		.false:
-			xor eax, eax
+			xor rax, rax
 			jmp .return
 		.true:
-			mov eax, 1
+			mov rax, 1
 		.return:
 			ret
 	; int Ispunct(char* ch)
@@ -38,25 +38,25 @@ section .text
 		mov al, byte [rcx]
 		cmp al, '!'
 		jl .false
-		cmp al '/'
+		cmp al, '/'
 		jng .true
 		cmp al, ':'
 		jl .false
-		cmp al '@'
+		cmp al, '@'
 		jng .true
 		cmp al, '['
 		jl .false
-		cmp al "`"
+		cmp al, "`"
 		jng .true
 		cmp al, '{'
 		jl .false
-		cmp al "~"
+		cmp al, "~"
 		jng .true
 		.false:
-			xor eax, eax
+			xor rax, rax
 			jmp .return
 		.true:
-			mov eax, 1
+			mov rax, 1
 		.return:
 			ret
 	; int Strlen(const char* string)
@@ -117,7 +117,7 @@ section .text
 		push rdi
 		push rax
 		mov rdi, rdx
-		xor eax, eax
+		xor rax, rax
 		cld
 		rep stosb
 		pop rax

@@ -3,8 +3,9 @@ extern unsigned int err;
 void help() {
 	printf("%s", chelp);
 }
-unsigned long long int flen(FILE* src) {
-	unsigned long long int length = 0;
+
+FILESIZE flen(FILE* src) {
+	FILESIZE length = 0;
 	fseek(src, 0, SEEK_END);
 	length = ftell(src);
 	fseek(src, 0, SEEK_SET);

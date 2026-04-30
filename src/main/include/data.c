@@ -19,6 +19,4 @@ char* chelp = {"Seed-Language Compiler: If you want to use me to compile some se
 	-o / --output <Fromat> <FilePath>: Output the <FilePath>\n\
 		<FilePath>: If no finished, default path is \"a.asm\";\n\
 		<Fromat>: There're some options of the fromat, like pe, elf, asm...\0"};
-char* BFW = {"Seed-Language Compiler: Emm... Your file size is too big. The copilation may be wrong. Do you want to continue?(y/n)"};
-char* OK = {"\nSeed-Language Compiler: OK\n\0"};
-char* UN = {"Seed-Language Compiler: I can't understand... Say agian!(y/n)\0"};
+char* BFW = {"Seed-Language Compiler: Emm... The file size is too big. I just read 64MB. Please cut the big file to more small file~\n\0"};

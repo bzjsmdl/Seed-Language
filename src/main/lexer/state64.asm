@@ -9,7 +9,7 @@ section .data
 	NotCharacter equ 4
 	Space equ 5
 section .bss
-	stateArr resb 0x20000000
+	stateArr resb 0x4000000
 section .text
 	global state
 	extern Isalpha, Isnum, Ispunct
@@ -20,8 +20,8 @@ section .text
 		push rsi
 		push rdi
 		push rbx
-		cmp rcx, 0x20000000
-		jg .ask
+		cmp rcx, 0x4000000
+		jg .bfw
 		mov rsi, rdx
 		mov rdi, stateArr
 		xor rbx, rbx
@@ -78,32 +78,3 @@ section .text
 		.err:
 			xor rax, rax
 			jmp .return
-		.ask:
-            push rcx
-            sub rsp, 32
-            mov rcx, s
-			mov rdx, BFW
-			call printf
-            add rsp, 32
-            pop rcx
-			.l:
-                sub rsp, 40
-				mov rdx, c
-				mov rcx, cf
-				call scanf
-                add rsp, 40
-                sub rsp, 40
-				mov rdx, OK
-				mov rcx, s
-				call printf
-				add rsp, 40
-				cmp byte [c], 'y'
-				je .mainloop
-				cmp byte [c], 'n'
-				je .bfw
-                sub rsp, 40
-				mov rdx, UN
-				mov rcx, s
-				call printf
-				add rsp, 40
-				jmp .l

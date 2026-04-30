@@ -1,6 +1,6 @@
 section .data
 	s db "%s"
-	cf db "%c"
+	cf db " %c"
 	c db 0
 	Character equ 0
 	Delimter equ 1
@@ -9,7 +9,7 @@ section .data
 	NotCharacter equ 4
 	Space equ 5
 section .bss
-	state resb 0x8000000
+	state resb 0x4000000
 section .text
 	global _state@8
 	extern Isalpha, Isnum, Ispunct
@@ -25,8 +25,8 @@ section .text
 		push ebx
 		push edx
 		mov ecx, dword [ebp + 8]
-		cmp ecx, 0x8000000
-		jg .ask
+		cmp ecx, 0x4000000
+		jg .bfw
 		mov esi, dword [ebp + 12]
 		mov edi, state
 		xor ebx, ebx
@@ -84,26 +84,3 @@ section .text
 		.err:
 			xor eax, eax
 			jmp .return
-		.ask:
-			push _BFW
-			push s
-			call _printf
-			add esp, 8
-			.l:
-				push c
-				push cf
-				call _scanf
-				add esp, 8
-				push _OK
-				push s
-				call _printf
-				add esp, 8
-				cmp byte [c], 'y'
-				je .mainloop
-				cmp byte [c], 'n'
-				je .bfw
-				push _UN
-				push s
-				call _printf
-				add esp, 8
-				jmp .l

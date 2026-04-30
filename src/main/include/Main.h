@@ -11,22 +11,31 @@ typedef struct CompilerTable {
 	const char* Target;
 }CompilerTable;
 
-typedef struct token {
+typedef struct tokencenter {
 	char* texts;
 	unsigned long long int len;
-	int type;
-	unsigned long long int line;
+	int ftype;
+	int ctype;
+	unsigned long long int line; 
+	struct token* back;
 	struct token* next;
 }Token;
 
+// Type
+#if __SIZEOF_POINTER__ == 4
+	typedef unsigned int INTSIZE;
+#elif __SIZEOF_POINTER__ == 8
+	typedef unsigned long long int INTSIZE;
+#endif
+
 // Utils Function
 	void help();
-	unsigned long long int flen(FILE* src);
+	INTSIZE flen(FILE* src);
 	void PrintError(const char* path, unsigned long long int line);
-	void print(char* str, unsigned long long int len);
+	void print(char* str, INTSIZE len);
 
 	// Lexer
-		Token* Lexer(unsigned long long int length, char* text);
+		Token* Lexer(INTSIZE length, char* text);
 		#if __SIZEOF_POINTER__ == 4
 			extern __stdcall char* state(unsigned int length, char* text);
 		#elif __SIZEOF_POINTER__ == 8

@@ -159,7 +159,7 @@ section .text
 		pop ecx
 		pop edi
 		pop ebp
-		ret 12
+		ret 8
 	; unsigned int Strchr(unsigned int count, char* chr, char* str)
 	_Strchr@12:
 		push ebp

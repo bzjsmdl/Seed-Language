@@ -46,12 +46,12 @@ int main(int argc, const char** argv) {
 			}
 		}
 	}
-	FILE* src = fopen(table->Input_File, "r");
+	FILE* src = fopen(table->Input_File, "rb");
 	if (src == NULL) {
 		err = CannotOpenFile;
 		goto clear;
 	}
-	unsigned long long int length = flen(src);
+	FILESIZE length = flen(src);
 	// printf("length : %llu\n", length);
 	text = malloc(length);
 	if (text == NULL) {
@@ -59,16 +59,11 @@ int main(int argc, const char** argv) {
 		goto clear;
 	}
 	fread(text, length, 1, src);
-	char* s = state(length, text);
-	for (unsigned int i = 0; i < length; i++) {
-		printf("(%c) : %d\n", text[i], s[i]);
-	}
 	clear:
 		fclose(src);
 		if (text != NULL) free(text);
 		if (err != NoError) goto Err;
 	noErr:
-		printf("%u\n", err);
 		return 0;
 	Err:
 		PrintError(table->Input_File, Line);
