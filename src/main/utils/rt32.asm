@@ -1,8 +1,29 @@
 section .text
-	global _Strlen@4, _Strequ@8, _Strcpy@12, _Clear@8, _Strchr@12, _Memequ@12 ;outter -> c
-	global Isalpha, Isnum, Ispunct ;inner -> Asm
+	global _Strlen@4, _Strequ@8, _Strcpy@12, _Clear@8, _Strchr@16, _Memequ@12, _Strcat@8 ;outter -> c
+	global _Isalpha@4, _Isnum@4, _Ispunct@4 ;inner -> Asm
+	; int Strcat(const char* src, char* dest);
+	_Strcat@8:
+		push ebp
+		mov ebp, esp
+		push esi
+		push edi
+		mov esi, dword [ebp + 8]
+		mov edi, dword [ebp + 12]
+		
+		push esi
+		call _Strlen@4
+		add edi, eax
+		mov ecx, eax
+
+		cld
+		rep movsb
+
+		pop edi
+		pop esi
+		pop ebp
+		ret 8
 	; int Isalpha(char* ch)
-	Isalpha:
+	_Isalpha@4:
 		push ebp
 		mov ebp, esp
 		push esi
@@ -26,7 +47,7 @@ section .text
 			pop ebp
 			ret 4
 	; int Isnum(char* ch)
-	Isnum:
+	_Isnum@4:
 		push ebp
 		mov ebp, esp
 		push esi
@@ -46,7 +67,7 @@ section .text
 			pop ebp
 			ret 4
 	; int Ispunct(char* ch)
-	Ispunct:
+	_Ispunct@4:
 		push ebp
 		mov ebp, esp
 		push esi
@@ -141,7 +162,7 @@ section .text
 		cld
 		rep movsb
 		pop esi
-		pop esi
+		pop edi
 		pop ecx
 		pop ebp
 		ret 12
@@ -160,29 +181,44 @@ section .text
 		pop edi
 		pop ebp
 		ret 8
-	; unsigned int Strchr(unsigned int count, char* chr, char* str)
-	_Strchr@12:
+	; unsigned int Strchr(unsigned int count, char* chr, char* str, int direction)
+	_Strchr@16:
 		push ebp
 		mov ebp, esp
 		push ecx
 		push edi
-		mov ecx, dword [ebp + 16]
+		push ebx
+		mov ebx, dword [ebp + 20]
+		mov edi, dword [ebp + 16]
 		mov eax, dword [ebp + 12]
-		mov edi, dword [ebp +  8]
+		mov ecx, dword [ebp + 8]
 		mov al, byte [eax]
+		test ebx, ebx
+		jne .nega
 		cld
-		repne scasb
-		jne .err
-		dec edi
-		mov eax, edi
+		.main:
+			repne scasb
+			jne .err
+			test ebx, ebx
+			jne .negaDI
+			dec edi
+		.t:
+			mov eax, edi
 		.return:
+			pop ebx
 			pop edi
 			pop ecx
 			pop ebp
-			ret 12
+			ret 16
 		.err:
 			xor eax, eax
 			jmp .return
+		.nega:
+			std
+			jmp .main
+		.negaDI:
+			inc edi
+			jmp .t
 	; int Memequ(unsigned int length, const char* str1, const char* str2)
 	_Memequ@12:
 		push ebp
@@ -190,9 +226,9 @@ section .text
 		push esi
 		push edi
 		push ecx
-		mov esi, dword [ebp + 8]
-		mov edi, dword [ebp + 12]
-		mov ecx, dword [ebp + 16]
+		mov ecx, dword [ebp + 8]
+		mov esi, dword [ebp + 12]
+		mov edi, dword [ebp + 16]
 		test esi, esi
 		je .false
 		test edi, edi
@@ -209,4 +245,4 @@ section .text
 			pop edi
 			pop esi
 			pop ebp
-			ret 16
+			ret 12

@@ -4,8 +4,8 @@ void help() {
 	printf("%s", chelp);
 }
 
-FILESIZE flen(FILE* src) {
-	FILESIZE length = 0;
+INTSIZE flen(FILE* src) {
+	INTSIZE length = 0;
 	fseek(src, 0, SEEK_END);
 	length = ftell(src);
 	fseek(src, 0, SEEK_SET);
@@ -30,6 +30,17 @@ void PrintError(const char* path, unsigned long long int line) {
 	else if (err == UnknowIdentifer) {
 		printf(errorlocation, path, line);
 		printf("%s", UI);
+	}
+	else if (err == BigFileWarnning) {
+		printf("%s", BFW);
+	}
+	else if (err == MissingClosingQuote) {
+		printf(errorlocation, path, line);
+		printf("%s", MCQ);
+	}
+	else if (err == UnkownBinary) {
+		printf(errorlocation, path, line);
+		printf("%s", UB);
 	}
 	else printf("(Unknow Error...)");
 }

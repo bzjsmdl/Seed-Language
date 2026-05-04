@@ -20,3 +20,8 @@ char* chelp = {"Seed-Language Compiler: If you want to use me to compile some se
 		<FilePath>: If no finished, default path is \"a.asm\";\n\
 		<Fromat>: There're some options of the fromat, like pe, elf, asm...\0"};
 char* BFW = {"Seed-Language Compiler: Emm... The file size is too big. I just read 64MB. Please cut the big file to more small file~\n\0"};
+char* MCQ = {"Seed-Language Compiler: Waa! I didn't find the closing quote on this line. Are you really write a string?\n\"Yes!\"--Please write the closing quote of the string\n\
+\"No!\"--Please delete the opening quote of the string(Not Data!!!).\0"};
+char* UB = {"Seed-Language Compiler: Are you joking with me?!! WHY ARE THERE DIGITS(not 0 or 1) OR CHARACTERS IN THIS BINARY NUMBER?!!! I order you fix it!!\n\0"};
+char* UH = {"Seed-Language Compiler: Why aren't characters(not from A to F) there in this hexadecimal number? Plealse fix it~"};
+char* nl = {"\n"};

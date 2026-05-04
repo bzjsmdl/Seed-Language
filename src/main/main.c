@@ -1,15 +1,20 @@
 #include "include/Main.h"
 unsigned int err = NoError;
-unsigned long long int Line = 0;
+unsigned long long int Line = 1;
 char* DefaultPath = "a.asm";
 CompilerTable* table;
+extern INTSIZE idx;
+extern char* txt[0x4000000 / sizeof(void*)];
+extern char bufPath[260];
+extern char isbadbufpath;
+
 int main(int argc, const char** argv) {
-	char* text = NULL;
 	if (argc <= 1) {
 		help();
 		goto Err;
 	}
 	table = malloc(sizeof(CompilerTable));
+	table->Path = argv[0];
 	if (table == NULL) {
 		err = AllocMemoryError;
 		goto noErr;
@@ -51,14 +56,22 @@ int main(int argc, const char** argv) {
 		err = CannotOpenFile;
 		goto clear;
 	}
-	FILESIZE length = flen(src);
-	// printf("length : %llu\n", length);
-	text = malloc(length);
+	INTSIZE length = flen(src);
+	char* text = malloc(length + 1);
 	if (text == NULL) {
 		err = AllocMemoryError;
 		goto clear;
 	}
 	fread(text, length, 1, src);
+	text[length] = 0;
+	fclose(src);
+
+	ClearText(length, text);
+	if (err != NoError) goto Err;
+	int a = lexer(length, text);
+	if (a == 0) {
+		goto clear;
+	}
 	clear:
 		fclose(src);
 		if (text != NULL) free(text);

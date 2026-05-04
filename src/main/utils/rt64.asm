@@ -1,6 +1,24 @@
 section .text
-	global Strlen, Strequ, Strcpy, clear, Strchr, Memequ ;outter -> C
+	global Strlen, Strequ, Strcpy, clear, Strchr, Memequ, Strcat ;outter -> C
 	global Isalpha, Isnum, Ispunct ;inner -> Asm
+	; int Strcat(const char* src, char* dest);
+	Strcat:
+		push rsi
+		push rdi
+		mov rsi, rcx
+		mov rdi, rdx
+		
+		push rsi
+		call Strlen
+		add rdi, rax
+		mov rcx, rax
+
+		cld
+		rep movsb
+
+		pop rdi
+		pop rsi
+		ret
 	; int Isalpha(char* ch)
 	Isalpha:
 		mov al, byte [rcx]
@@ -123,22 +141,34 @@ section .text
 		pop rax
 		pop rdi
 		ret
-	; unsigned long long int Strchr(unsigned long long int count, char* chr, char* str)
+	; unsigned long long int Strchr(unsigned int count, char* chr, char* str, int direction)
 	Strchr:
 		push rdi
 		mov al, byte [rdx]
 		mov rdi, r8
+		test r9, r9
+		jne .nega
 		cld
-		repne scasb
-		jne .err
-		dec rdi
-		mov rax, rdi
+		.main:
+			repne scasb
+			jne .err
+			test r9, r9
+			jne .negaDI
+			dec rdi
+		.t:
+			mov rax, rdi
 		.return:
 			pop rdi
 			ret
 		.err:
 			xor rax, rax
 			jmp .return
+		.nega:
+			std
+			jmp .main
+		.negaDI:
+			inc rdi
+			jmp .t
 	; int Memequ(unsigned long long int length, const char* str1, const char* str2)
 	Memequ:
 		push rsi
