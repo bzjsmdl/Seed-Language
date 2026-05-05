@@ -18,37 +18,27 @@
     In Seed we have several macro attributes. They're <strong>@text</strong>, <strong>@res</strong> (REServed, not optimized), <strong>@resa</strong> (REServed Assembly — like C's inline assembly), and <strong>@null</strong>.
 - ### <strong>Near Assembly</strong>:<br>
     In other high-level languages there are many control keywords, such as <strong>if</strong>, <strong>else</strong>, <strong>switch</strong>, but in Seed the primary comparison instruction is <strong>cmp</strong>.
-#### <br>Example:<br>
+## Fast Start
+Write this into ```a.seed```:
 ```seed
-// PLAN!!! WILL CHANDE THE GRAMMER
-#macro<@res> equ(%%pir a, %%pir b, %%lbl l) {
-// %%pir: Pointer, Integer(count immediately or data in memory) and Register
-// %%lbl: LaBeL(label)
-   cmp %a, %b;
-   je %l;
-}
 sec .text {
-  pub main { // Windows64 entry
-    10 => rax;
-    equ rax, 10, a;
-    jmp end;
-    loc a: eax ^ eax;
-    loc end: nop;
+  pub main {
+    nop;
   }
 }
-    /*
-In NASM(haven't macro):
-    section .text
-    global main
-    main:
-    mov eax, 10
-    cmp rax, 10
-    je .a
-    jmp .end
-    .a: xor eax, eax
-    .end: nop
-    */
 ```
+Complie it with this:
+```bash
+./seed32 -f ./a.seed -o asm ./a.s
+# 64: ./seed64 -f ./a.seed -o asm ./a.s
+nasm -f win32 ./a.s -o ./a.obj
+# Go to https://www.nasm.us/pub/nasm/releasebuilds/ to dwonload it
+gcc ./a.obj -o ./a.exe
+./a.exe
+```
+If no error, it can run.
+
+
 ## Q & A
 ### Q: Can I submit a PR for the language?<br>
 #### A: **No**. Because I'm worried that you'll **destory our language's uniqueness** and my code is **very bad**. But you still can **fork it down** or **provide issues**.
