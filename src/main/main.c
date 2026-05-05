@@ -1,13 +1,14 @@
 #include "include/Main.h"
 unsigned int err = NoError;
-unsigned long long int Line = 1;
+INTSIZE Line = 0;
 char* DefaultPath = "a.asm";
 CompilerTable* table;
 extern INTSIZE idx;
 extern char* txt[0x4000000 / sizeof(void*)];
 extern char bufPath[260];
 extern char isbadbufpath;
-
+char* type = NULL;
+const char* path;
 int main(int argc, const char** argv) {
 	if (argc <= 1) {
 		help();
@@ -15,6 +16,8 @@ int main(int argc, const char** argv) {
 	}
 	table = malloc(sizeof(CompilerTable));
 	table->Path = argv[0];
+	table->Output_File = DefaultPath;
+	table->Target = "asm";
 	if (table == NULL) {
 		err = AllocMemoryError;
 		goto noErr;
@@ -51,6 +54,7 @@ int main(int argc, const char** argv) {
 			}
 		}
 	}
+	path = table->Input_File;
 	FILE* src = fopen(table->Input_File, "rb");
 	if (src == NULL) {
 		err = CannotOpenFile;
@@ -72,8 +76,34 @@ int main(int argc, const char** argv) {
 	if (a == 0) {
 		goto clear;
 	}
+	// printf("\nidx: %lu\n", idx);
+	type = calloc(idx, 1);
+	if (type == NULL) {
+		err = AllocMemoryError;
+		goto clear;
+	}
+	Type(type);
+	for (INTSIZE i = 0; i < idx; i++) {
+		if (0 > type[i] || type[i] > 4) {
+			err = UnkownToken;
+			goto clear;
+		}
+		// if (type[i] == Keyword) printf("\nType: Keyword\n");
+		// else if (type[i] == Identifer) printf("\nType: Identifer\n");
+		// else if (type[i] == NewLine) printf("\nType: NewLine\n");
+		// else if (type[i] == Separator) printf("\nType: Separator\n") ;
+		// else if (type[i] == Data) printf("\nType: Data\n");
+	}
+	if (PStype(type) == 0) {
+		goto clear;
+	}
+	if (PSgrammer(type, txt) == 0) {
+		goto clear;
+	}
+	generate(txt);
 	clear:
 		fclose(src);
+		if (type != NULL) free(type);
 		if (text != NULL) free(text);
 		if (err != NoError) goto Err;
 	noErr:

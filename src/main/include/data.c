@@ -24,4 +24,7 @@ char* MCQ = {"Seed-Language Compiler: Waa! I didn't find the closing quote on th
 \"No!\"--Please delete the opening quote of the string(Not Data!!!).\0"};
 char* UB = {"Seed-Language Compiler: Are you joking with me?!! WHY ARE THERE DIGITS(not 0 or 1) OR CHARACTERS IN THIS BINARY NUMBER?!!! I order you fix it!!\n\0"};
 char* UH = {"Seed-Language Compiler: Why aren't characters(not from A to F) there in this hexadecimal number? Plealse fix it~"};
-char* nl = {"\n"};
+char* UT = {"Seed-Language Compiler: Oh my gosh... It's done for us... I don't know this token at all. This error maybe yours, maybe mine...\n\
+Ah, please try again or delete me...\0"};
+char* ITG = {"Seed-Language Compiler: Oh, my friend! You were wrong in what you wrote. They're wrong in token type. Please fix it~"};
+char* DSE = {"Seed-Language Compiler:"};

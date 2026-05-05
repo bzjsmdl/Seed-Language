@@ -25,13 +25,22 @@ typedef struct CompilerTable {
 // Utils Function
 	void help();
 	INTSIZE flen(FILE* src);
-	void PrintError(const char* path, unsigned long long int line);
-	void print(char* str, unsigned long long int len);
+	void PrintError(const char* path, INTSIZE line);
+	void print(char* str,INTSIZE len);
+	int IsKeyword(char* str);
+	int IsSep(char* str);
+	int IsReg(char* str);
 
 	// Lexer
-		extern int lexer(INTSIZE length, char* text);
+		int lexer(INTSIZE length, char* text);
 	// Precompiler
 		void ClearText(INTSIZE length, char* text);
+		extern void Type(char* type);
+	// Parser
+		int PStype(char* type);
+		int PSgrammer(char* type, char** txt);
+	// Generate
+		int generate(char** txt);
 	// Runtime Asm Function
 	#if __SIZEOF_POINTER__ == 4
 		extern __stdcall unsigned int Strlen(const char* string);
@@ -72,46 +81,22 @@ enum error {
 	UnknowIdentifer,
 	BigFileWarnning,
 	MissingClosingQuote,
-	UnkownBinary,
-	UnkownHexadecimal,
+	UnkownBinary,  // UnknowBinary
+	UnkownHexadecimal, //UnkownHexadecimal
+	UnkownToken, // UnknowToken
+	InvalidTypeGroup,
+	DefinedSectionOrLabelError,
+	KeywordMissingAruments,
+	MissingClosingBrace,
+	SentenceMissTheEnd
 };
 
-enum FatherType {
+enum Type {
 	Keyword,
 	Identifer,
 	Separator,
-	Data
-};
-enum ChildType {
-	a,
-
-	Preprocess_Directive,
-	Placeholder,
-	Attribute,
-
-	String,
-
-	SSection,
-	DSection,
-	Section,
-
-	LocalLabel,
-	GlobalLabel,
-	InnerLabel,
-	SuffixLabel,
-	Label,
-
-	Pointer,
-
-	ArithmeticOperator,
-	LogicalOperator,
-	MoveOperator,
-	NowPtrDel,
-
-	Hex,
-	Bin,
-	Dec,
-	Oct
+	Data,
+	NewLine
 };
 
 enum CharacterState {
@@ -124,7 +109,11 @@ enum CharacterState {
 
 // Info
 	// ErrorTips
+	#if  __SIZEOF_POINTER__ == 8
 		#define errorlocation "(In %s:%llu)\n"
+	#elif  __SIZEOF_POINTER__ == 4
+		#define errorlocation "(In %s:%u)\n"
+	#endif
 		extern char* AM;
 		extern char* CNOF;
 		extern char* CLAM;
@@ -134,6 +123,10 @@ enum CharacterState {
 		extern char* BFW;
 		extern char* MCQ;
 		extern char* UB;
+		extern char* UT;
+		extern char* UH;
+		extern char* ITG;
+		extern char* DSE;
 // Macro
 	//      istsep(strptr)
 	#define isdsep(ch) (Memequ(2, "=>", ch) || Memequ(2, "%%", ch) || Memequ(2, "<<", ch) || Memequ(2, ">>", ch) || Memequ(2, "&&", ch) || Memequ(2, "$$", ch))
@@ -144,18 +137,21 @@ enum CharacterState {
 						|| Memequ(1, "~", ch) || Memequ(1, "+", ch) || Memequ(1, "-", ch) || Memequ(1, "*", ch) || Memequ(1, "/", ch)\
 						|| Memequ(1, "^", ch))
 	#define isLLO(ch) (Memequ(2, "&&", ch) || Memequ(2, "||", ch))
+	#define isSep(ch) (isdsep(ch) || istsep(ch) || isACO(ch) || isLLO(ch) || Memequ(1, "{", ch) || Memequ(1, "}", ch)\
+					  || Memequ(1, "[", ch) || Memequ(1, "]", ch) || Memequ(1, ">", ch) || Memequ(1, "<", ch) || Memequ(1, ";", ch))
 	
-	#define isSec(str, len) (Memequ(len, str, ".text") || Memequ(len, str, ".data") || Memequ(len, str, ".bss") || Memequ(len, str, ".rdata"))
-	#define isReg8(str, len) (Memequ(len, str, "al") || Memequ(len, str, "bl") || Memequ(len, str, "cl") || Memequ(len, str, "dl") || Memequ(len, str, "ah") || Memequ(len, str, "bh") || Memequ(len, str, "ch") || Memequ(len, str, "dh"))
-	#define isReg16(str, len) (Memequ(len, str, "ax") || Memequ(len, str, "bx") || Memequ(len, str, "cx") || Memequ(len, str, "dx") || Memequ(len, str, "sp") || Memequ(len, str, "ss") || Memequ(len, str, "ds") || Memequ(len, str, "es") || Memequ(len, str, "fs") || Memequ(len, str, "gs") || Memequ(len, str, "si") || Memequ(len, str, "di") || Memequ(len, str, "bp"))
-	#define isReg32(str, len) (Memequ(len, str, "eax") || Memequ(len, str, "ebx") || Memequ(len, str, "ecx") || Memequ(len, str, "edx") || Memequ(len, str, "esi") || Memequ(len, str, "edi") || Memequ(len, str, "esp") || Memequ(len, str, "ebp") || Memequ(len, str, "ax") || Memequ(len, str, "bx") || Memequ(len, str, "cx") || Memequ(len, str, "dx"))
-	#define isReg64(str, len) (Memequ(len, str, "sil") || Memequ(len, str, "dil") || Memequ(len, str, "bpl") || Memequ(len, str, "spl") || Memequ(len, str, "r8b") || Memequ(len, str, "r9b") || Memequ(len, str, "r10b") || Memequ(len, str, "r11b") || Memequ(len, str, "r12b") || Memequ(len, str, "r13b") || Memequ(len, str, "r14b") || Memequ(len, str, "r15b")\
-							  || Memequ(len, str, "rax") || Memequ(len, str, "rbx") || Memequ(len, str, "rcx") || Memequ(len, str, "rdx") || Memequ(len, str, "rsp")  || Memequ(len, str, "rsi") || Memequ(len, str, "rdi") || Memequ(len, str, "rbp")\
-							  || Memequ(len, str, "r8w") || Memequ(len, str, "r9w") || Memequ(len, str, "r10w") || Memequ(len, str, "r11w") || Memequ(len, str, "r12w") || Memequ(len, str, "r13w") || Memequ(len, str, "r14w") || Memequ(len, str, "r15w")\
-							  || Memequ(len, str, "r8d") || Memequ(len, str, "r9d") || Memequ(len, str, "r10d") || Memequ(len, str, "r11d") || Memequ(len, str, "r12d") || Memequ(len, str, "r13d") || Memequ(len, str, "r14d") || Memequ(len, str, "r15d"))
-	#define isReg(str, len) (isReg8(str, len) || isReg8(str, len) || isReg8(str, len) || isReg8(str, len))
-	#define isKeyword(str, len) (Memequ(len, str, "sec") || Memequ(len, str, "pub") || Memequ(len, str, "loc") || Memequ(len, str, "priv")\
-								 || Memequ(len, str, "nop") || Memequ(len, str, "cmp") || Memequ(len, str, "je") || Memequ(len, str, "jmp") || Memequ(len, str, "loop")\
-								 || Memequ(len, str, "byte") || Memequ(len, str, "word") || Memequ(len, str, "dword") || Memequ(len, str, "qword") || Memequ(len, str, "%%data")\
-								 || Memequ(len, str, "#macro"))
+	#define isSec(str) (Memequ(5, str, ".text") || Memequ(5, str, ".data") || Memequ(4, str, ".bss") || Memequ(6, str, ".rdata"))
+	#define isReg8(str) (Memequ(2, str, "al") || Memequ(2, str, "bl") || Memequ(2, str, "cl") || Memequ(2, str, "dl") || Memequ(2, str, "ah") || Memequ(2, str, "bh") || Memequ(2, str, "ch") || Memequ(2, str, "dh"))
+	#define isReg16(str) (Memequ(2, str, "ax") || Memequ(2, str, "bx") || Memequ(2, str, "cx") || Memequ(2, str, "dx") || Memequ(2, str, "sp") || Memequ(2, str, "ss") || Memequ(2, str, "ds") || Memequ(2, str, "es") || Memequ(2, str, "fs") || Memequ(2, str, "gs") || Memequ(2, str, "si") || Memequ(2, str, "di") || Memequ(2, str, "bp"))
+	#define isReg32(str) (Memequ(3, str, "eax") || Memequ(3, str, "ebx") || Memequ(3, str, "ecx") || Memequ(3, str, "edx") || Memequ(3, str, "esi") || Memequ(3, str, "edi") || Memequ(3, str, "esp") || Memequ(3, str, "ebp"))
+	#define isReg64(str) (Memequ(3, str, "sil") || Memequ(3, str, "dil") || Memequ(3, str, "bpl") || Memequ(3, str, "spl") || Memequ(3, str, "r8b") || Memequ(3, str, "r9b") || Memequ(4, str, "r10b") || Memequ(4, str, "r11b") || Memequ(4, str, "r12b") || Memequ(4, str, "r13b") || Memequ(4, str, "r14b") || Memequ(4, str, "r15b")\
+							  || Memequ(3, str, "rax") || Memequ(3, str, "rbx") || Memequ(3, str, "rcx") || Memequ(3, str, "rdx") || Memequ(3, str, "rsp")  || Memequ(3, str, "rsi") || Memequ(3, str, "rdi") || Memequ(3, str, "rbp")\
+							  || Memequ(3, str, "r8w") || Memequ(3, str, "r9w") || Memequ(4, str, "r10w") || Memequ(4, str, "r11w") || Memequ(4, str, "r12w") || Memequ(4, str, "r13w") || Memequ(4, str, "r14w") || Memequ(4, str, "r15w")\
+							  || Memequ(3, str, "r8d") || Memequ(3, str, "r9d") || Memequ(4, str, "r10d") || Memequ(4, str, "r11d") || Memequ(4, str, "r12d") || Memequ(4, str, "r13d") || Memequ(4, str, "r14d") || Memequ(4, str, "r15d"))
+	#define isReg(str) (isReg8(str) || isReg16(str) || isReg32(str) || isReg64(str))
+	#define isKeyword(str) (Memequ(3, str, "sec") || Memequ(3, str, "pub") || Memequ(3, str, "loc") || Memequ(4, str, "priv")\
+			|| Memequ(3, str, "nop") || Memequ(3, str, "cmp") || Memequ(2, str, "je") || Memequ(3, str, "jmp") || Memequ(4, str, "loop")\
+			|| Strequ(str ,"rep") || Strequ("cpy", str)\
+			|| Memequ(4, str, "byte") || Memequ(4, str, "word") || Memequ(5, str, "dword") || Memequ(5, str, "qword") || Memequ(6, str, "%%data")\
+			|| Memequ(6, str, "#macro"))
 #endif

@@ -1,6 +1,6 @@
 section .text
 	global _Strlen@4, _Strequ@8, _Strcpy@12, _Clear@8, _Strchr@16, _Memequ@12, _Strcat@8 ;outter -> c
-	global _Isalpha@4, _Isnum@4, _Ispunct@4 ;inner -> Asm
+	global _Isalpha@4, _Isnum@4, _Ispunct@4
 	; int Strcat(const char* src, char* dest);
 	_Strcat@8:
 		push ebp
