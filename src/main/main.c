@@ -10,6 +10,7 @@ extern char isbadbufpath;
 char* type = NULL;
 const char* path;
 int main(int argc, const char** argv) {
+	char IsErrInt = 0;
 	if (argc <= 1) {
 		help();
 		goto Err;
@@ -28,6 +29,9 @@ int main(int argc, const char** argv) {
 			if (Strequ(argv[i], "-h") || Strequ(argv[i], "--help")) {
 				help();
 				goto noErr;
+			}
+			else if (Strequ(argv[i], "-ei") || Strequ(argv[i], "--error")) {
+				IsErrInt = 1;
 			}
 			else if (Strequ(argv[i], "-f") || Strequ(argv[i], "--file")) {
 				if (i + 1 < argc && !(Strequ(argv[i + 1], "-\0"))) {
@@ -103,12 +107,18 @@ int main(int argc, const char** argv) {
 	generate(txt);
 	clear:
 		fclose(src);
+		if (txt[0] != 0) {
+			for (INTSIZE i = 0; i < idx; i++) {
+    			free(txt[i]);
+			}
+		}
 		if (type != NULL) free(type);
 		if (text != NULL) free(text);
 		if (err != NoError) goto Err;
 	noErr:
 		return 0;
 	Err:
-		PrintError(table->Input_File, Line);
+		if (IsErrInt == 0) PrintError(path, Line);
+		else printf(errorlocation "\nErr: %d\n", path, Line, err);
 		return 1;
 }

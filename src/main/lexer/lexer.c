@@ -65,3 +65,22 @@ int lexer(INTSIZE length, char* text) {
     }
     return 1;
 }
+void Type(char* type) {
+	for (INTSIZE i = 0; i < idx - 1; i++) {
+        if (IsKeyword(txt[i])) {
+		   type[i] = Keyword;
+        }
+        else if (IsSep(txt[i])) {
+            type[i] = Separator;
+        }
+        else if (Isalpha(txt[i]) || txt[i][0] == '_' || txt[i][0] == '.') {
+            type[i] = Identifer;
+        }
+        else if (Isnum(txt[i]) || IsReg(txt[i])) {
+            type[i] = Data;
+        }
+        else if (txt[i][0] == '\n') {
+            type[i] = NewLine;
+        }
+    }
+}

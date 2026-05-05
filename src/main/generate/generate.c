@@ -11,19 +11,29 @@ int generate(char** txt) {
         return 0;
     }
     path = table->Output_File;
-    for (INTSIZE i = 0; i < idx - 1; i++) {
+    for (INTSIZE i = 0; i < idx - 1;) {
         if (Strequ(txt[i], "sec")) {
             fprintf(output, "section %s\n", txt[i + 1]);
-            i += 3;
-            continue;
+            i += 2;
         }
         else if (Strequ(txt[i], "pub")) {
             fprintf(output, "global %s\n%s:\n", txt[i + 1], txt[i + 1]);
-            i += 3;
-            continue;
+            i += 2;
         }
-        else if (Strequ(txt[i], "nop")){ 
-            fprintf(output, "nop\n");
+        else if (Strequ(txt[i], "nop") || Strequ(txt[i], "ret")){ 
+            fprintf(output, "%s ", txt[i]);
+            i++;
+        }
+        else if (Strequ(txt[i], "=>")) {
+            fprintf(output, "mov %s, %s", txt[i + 1], txt[i - 1]);
+            i += 2;
+        }
+        else if (txt[i][0] == '\n') {
+            fprintf(output, "\n");
+            i++;
+        }
+        else {
+            i++;
         }
     }
     fclose(output);

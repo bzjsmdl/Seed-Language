@@ -13,48 +13,63 @@ INTSIZE flen(FILE* src) {
 }
 
 void PrintError(const char* path, INTSIZE line) {
-	if (err == CannotOpenFile) {
-		printf("%s", CNOF);
-		printf("(Path: %s)\n", path);
-	}
-	else if (err == AllocMemoryError) {
-		printf("%s", AM);
-	}
-	else if (err == CommandLineMissingArgument) {
-		printf("%s", CLAM);
-	}
-	else if (err == DifinedSectionNameError) {
-		printf(errorlocation, path, line);
-		printf("%s", DSNE);
-	}
-	else if (err == UnknowIdentifer) {
-		printf(errorlocation, path, line);
-		printf("%s", UI);
-	}
-	else if (err == BigFileWarnning) {
-		printf("%s", BFW);
-	}
-	else if (err == MissingClosingQuote) {
-		printf(errorlocation, path, line);
-		printf("%s", MCQ);
-	}
-	else if (err = InvalidTypeGroup) {
-		printf(errorlocation, path, line);
-		printf("%s", ITG);
-	}
-	else if (err == UnkownBinary) {
-		printf(errorlocation, path, line);
-		printf("%s", UB);
-	}
-	else if (err = UnkownToken) {
-		printf(errorlocation, path, line);
-		printf("%s", UT);
-	}
-	else if (err = UnkownHexadecimal) {
-		printf(errorlocation, path, line);
-		printf("%s", UH);
-	}
-	else printf("(Unknow Error...)");
+	// if (err == CannotOpenFile) {
+	// 	printf("%s", CNOF);
+	// 	printf("(Path: %s)\n", path);
+	// 	return;
+	// }
+	// else if (err == AllocMemoryError) {
+	// 	printf("%s", AM);
+	// 	return;
+	// }
+	// else if (err == CommandLineMissingArgument) {
+	// 	printf("%s", CLAM);
+	// 	return;
+	// }
+	// else if (err == DifinedSectionNameError) {
+	// 	printf(errorlocation, path, line);
+	// 	printf("%s", DSNE);
+	// 	return;
+	// }
+	// else if (err == UnknowIdentifer) {
+	// 	printf(errorlocation, path, line);
+	// 	printf("%s", UI);
+	// 	return;
+	// }
+	// else if (err == BigFileWarnning) {
+	// 	printf("%s", BFW);
+	// 	return;
+	// }
+	// else if (err == MissingClosingQuote) {
+	// 	printf(errorlocation, path, line);
+	// 	printf("%s", MCQ);
+	// 	return;
+	// }
+	// else if (err = InvalidTypeGroup) {
+	// 	printf(errorlocation, path, line);
+	// 	printf("%s", ITG);
+	// 	return;
+	// }
+	// else if (err == UnkownBinary) {
+	// 	printf(errorlocation, path, line);
+	// 	printf("%s", UB);
+	// 	return;
+	// }
+	// else if (err = UnkownToken) {
+	// 	printf(errorlocation, path, line);
+	// 	printf("%s", UT);
+	// 	return;
+	// }
+	// else if (err = UnkownHexadecimal) {
+	// 	printf(errorlocation, path, line);
+	// 	printf("%s", UH);
+	// 	return;
+	// }
+	// else {
+	// 	printf("(Unknow Error: %u)", err);
+	// 	return;
+	// }
+	printf(errorlocation "\nErr: %d\n", path, line, err);
 }
 
 void print(char* str, INTSIZE len) {

@@ -15,9 +15,11 @@ typedef struct CompilerTable {
 // Type
 #if __SIZEOF_POINTER__ == 4
 	typedef unsigned int INTSIZE;
+	typedef signed int SINT;
 	#define IU "%u"
 #elif __SIZEOF_POINTER__ == 8
 	typedef unsigned long long int INTSIZE;
+	typedef signed long long int SINT;
 	#define IU "%llu"
 #endif
 #define KB(n) n*1024
@@ -33,9 +35,9 @@ typedef struct CompilerTable {
 
 	// Lexer
 		int lexer(INTSIZE length, char* text);
+		void Type(char* type);
 	// Precompiler
 		void ClearText(INTSIZE length, char* text);
-		extern void Type(char* type);
 	// Parser
 		int PStype(char* type);
 		int PSgrammer(char* type, char** txt);
@@ -88,7 +90,9 @@ enum error {
 	DefinedSectionOrLabelError,
 	KeywordMissingAruments,
 	MissingClosingBrace,
-	SentenceMissTheEnd
+	SentenceMissTheEnd,
+	InvalidArithmetic,
+	InvalidOperation
 };
 
 enum Type {
@@ -134,11 +138,12 @@ enum CharacterState {
 	#define istsep(ch) (Memequ(3, "<^<", ch) || Memequ(3, ">&>", ch) || Memequ(3, ">->", ch) || Memequ(3, "<-<", ch)\
 						|| Memequ(3, ">^>", ch) || Memequ(3, "<&<", ch) || Memequ(3, "<^<", ch))
 	#define isACO(ch) (istsep(ch) || Memequ(2, "<<", ch) || Memequ(2, ">>", ch) || Memequ(1, "&", ch) || Memequ(1, "|", ch)\
-						|| Memequ(1, "~", ch) || Memequ(1, "+", ch) || Memequ(1, "-", ch) || Memequ(1, "*", ch) || Memequ(1, "/", ch)\
+						|| Memequ(1, "!", ch) || Memequ(1, "+", ch) || Memequ(1, "-", ch) || Memequ(1, "*", ch) || Memequ(1, "/", ch)\
 						|| Memequ(1, "^", ch))
 	#define isLLO(ch) (Memequ(2, "&&", ch) || Memequ(2, "||", ch))
 	#define isSep(ch) (isdsep(ch) || istsep(ch) || isACO(ch) || isLLO(ch) || Memequ(1, "{", ch) || Memequ(1, "}", ch)\
-					  || Memequ(1, "[", ch) || Memequ(1, "]", ch) || Memequ(1, ">", ch) || Memequ(1, "<", ch) || Memequ(1, ";", ch))
+					  || Memequ(1, "[", ch) || Memequ(1, "]", ch) || Memequ(1, ">", ch) || Memequ(1, "<", ch) || Memequ(1, ";", ch)\
+					  || Memequ(1, "~", ch))
 	
 	#define isSec(str) (Memequ(5, str, ".text") || Memequ(5, str, ".data") || Memequ(4, str, ".bss") || Memequ(6, str, ".rdata"))
 	#define isReg8(str) (Memequ(2, str, "al") || Memequ(2, str, "bl") || Memequ(2, str, "cl") || Memequ(2, str, "dl") || Memequ(2, str, "ah") || Memequ(2, str, "bh") || Memequ(2, str, "ch") || Memequ(2, str, "dh"))
@@ -151,7 +156,7 @@ enum CharacterState {
 	#define isReg(str) (isReg8(str) || isReg16(str) || isReg32(str) || isReg64(str))
 	#define isKeyword(str) (Memequ(3, str, "sec") || Memequ(3, str, "pub") || Memequ(3, str, "loc") || Memequ(4, str, "priv")\
 			|| Memequ(3, str, "nop") || Memequ(3, str, "cmp") || Memequ(2, str, "je") || Memequ(3, str, "jmp") || Memequ(4, str, "loop")\
-			|| Strequ(str ,"rep") || Strequ("cpy", str)\
+			|| Strequ(str ,"rep") || Strequ("cpy", str) || Strequ("ret", str)\
 			|| Memequ(4, str, "byte") || Memequ(4, str, "word") || Memequ(5, str, "dword") || Memequ(5, str, "qword") || Memequ(6, str, "%%data")\
 			|| Memequ(6, str, "#macro"))
 #endif

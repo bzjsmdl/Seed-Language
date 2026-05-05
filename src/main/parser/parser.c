@@ -38,7 +38,7 @@ int PStype(char* type) {
 
 int PSgrammer(char* type, char** txt) {
 	Line = 1;
-	for (INTSIZE i = 0; i < idx - 1; i++) {
+	for (INTSIZE i = 0; i < idx; i++) {
 		if (type[i] == NewLine) Line++;
 		else if (type[i] == Keyword) {
 			if (Strequ(txt[i], "sec") || Strequ(txt[i], "pub") || Strequ(txt[i], "loc") || Strequ(txt[i], "priv")) {
@@ -59,24 +59,32 @@ int PSgrammer(char* type, char** txt) {
 						err = MissingClosingBrace;
 						return 0;
 					}
-					INTSIZE j = i;
-					while (j < idx - 1 && txt[j][0] != '}') {
-						if (j + 1 >= idx) {
-							err = MissingClosingBrace;
-							return 0;
-						}
-						j++;
-					}
 				}
 			}
-			else if (Strequ(txt[i], "nop")) {
-				if (i + 1 >= idx) {
+			else if (Strequ(txt[i], "nop") || Strequ(txt[i], "ret")) {
+				if (i + 1 >= idx || txt[i + 1][0] != ';') {
 					err = SentenceMissTheEnd;
 					return 0;
 				}
 				continue;
 			}
 		}
+		else if (type[i] == Separator && (txt[i][0] != ';' || txt[i][0] != '{' || txt[i][0] != '}')) {
+			if (txt[i][0] == '!') {
+				if (i + 1 >= idx && (type[i + 1] != Data || type[i + 1] != Keyword)) {
+					err = InvalidArithmetic;
+					return 0;
+				}
+				continue;
+			}
+			else {
+				if (i + 1 >= idx || i == 0) {
+					err = ((i + 1 >= idx && i == 0) && isACO(txt[i])) ? InvalidArithmetic : InvalidOperation;
+					return 0;
+				}
+			}
+		}
+		else continue;
 	}
 	return 1;
 }
