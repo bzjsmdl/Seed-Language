@@ -190,3 +190,10 @@ section .text
 			pop rdi
 			pop rsi
 			ret
+; mov rax, 1
+; mov rbx, 1
+; mov rcx, 1
+; mov rdx, 1
+; mov rsi, 1
+; mov rbp, 1
+; mov rdi, 1

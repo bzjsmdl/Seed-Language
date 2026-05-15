@@ -81,22 +81,26 @@ int main(int argc, const char** argv) {
 		goto clear;
 	}
 	// printf("\nidx: %lu\n", idx);
-	type = calloc(idx, 1);
+	type = malloc(idx);
 	if (type == NULL) {
 		err = AllocMemoryError;
 		goto clear;
 	}
+	for (INTSIZE i = 0; i < idx; i++) type[i] = Notype;
 	Type(type);
 	for (INTSIZE i = 0; i < idx; i++) {
-		if (0 > type[i] || type[i] > 4) {
-			err = UnkownToken;
-			goto clear;
-		}
 		// if (type[i] == Keyword) printf("\nType: Keyword\n");
 		// else if (type[i] == Identifer) printf("\nType: Identifer\n");
 		// else if (type[i] == NewLine) printf("\nType: NewLine\n");
 		// else if (type[i] == Separator) printf("\nType: Separator\n") ;
 		// else if (type[i] == Data) printf("\nType: Data\n");
+		// else {
+		// 	printf("\nType: %u Text: %s\n", type[i], txt[i]);
+		// }
+		if (Keyword > type[i] || type[i] > NewLine) {
+			err = UnkownToken;
+			goto clear;
+		}
 	}
 	if (PStype(type) == 0) {
 		goto clear;

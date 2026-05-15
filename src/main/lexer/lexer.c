@@ -12,75 +12,79 @@ extern INTSIZE Line;
 int lexer(INTSIZE length, char* text) {
     char a[2] = {0}, isStr = 0, quote = 0, *b;
     INTSIZE start = 0;
+    Line = 1;
     for (INTSIZE i = 0; i < length; i++) {
         a[0] = text[i];
         a[1] = text[i + 1];
-        if (isStr) {
-            if (a[0] == quote) goto s;
-            else if (a[0] == '\n' || i + 1 < length) {
-                err = MissingClosingQuote;
-                return 0;
-            }
-            continue;
-        }
-        else {
-            if (a[0] == '\"' || a[0] == '\'') goto s;
-            else if (Isalpha(a)) {
-                if (Isalpha(a + 1) || Isnum(a + 1) || a[1] == '_' || a[1] == '.') continue;
-                else goto addp;
-            }
-            else if (Isnum(a)) {
-                if (Isnum(a + 1) || a[1] == 'x' || (a[1] >= 'A' && a[1] <= 'F') || (a[1] >= 'a' && a[1] <= 'f')) continue;
-                else goto addp;
-            }
-            else if (Ispunct(a)) {
-                if (Isalpha(a + 1) || Isnum(a + 1) || Ispunct(a + 1)) continue;
-                else goto addp;
-            }
-            else if (a[0] == '\n') {
-                goto addp;
-            }
-            else goto clearNC;
-        }
-        continue;
-        addp:
-            b = malloc(i - start + 2);
-            if (b == NULL) {
-                err = AllocMemoryError;
-                return 0;
-            }
-            txt[idx] = b;
-            Strcpy(i - start + 1, text + start, b);
-            b[i - start + 1] = 0;
-            // printf("Text: %s\n", txt[idx]);
-            idx++;
-            clearNC:
-                start = i + 1;
+            if (isStr) {
+                if (a[0] == quote) goto s;
+                else if (a[0] == '\n' || i + 1 >= length) {
+                    err = MissingClosingQuote;
+                    return 0;
+                }
                 continue;
-        s:
-            isStr = ~isStr;
-            if (isStr == 0) goto addp;
-            quote = a[0];
+            }
+            else {
+                if (a[0] == '\"' || a[0] == '\'') goto s;
+                else if (a[0] == '\n') {
+                    Line++;
+                    goto addp;
+                }
+                else if (Isalpha(a)) {
+                    if (Isalpha(a + 1) || Isnum(a + 1) || a[1] == '_' || a[1] == '.' || a[1] == '@' || a[1] == '%') continue;
+                    else goto addp;
+                }
+                else if (Isnum(a)) {
+                    if (Isnum(a + 1) || a[1] == 'x' || (a[1] >= 'A' && a[1] <= 'F') || (a[1] >= 'a' && a[1] <= 'f')) continue;
+                    else goto addp;
+                }
+                else if (Ispunct(a)) {
+                    if (a[1] == '*' || a[0] == '*') goto addp;
+                    else if (Isalpha(a + 1) || (Ispunct(a + 1) && a[1] != ';') || Isnum(a + 1)) continue;
+                    else goto addp;
+                }
+                else goto clearNC;
+            }
             continue;
+            addp:
+                b = malloc(i - start + 2);
+                if (b == NULL) {
+                    err = AllocMemoryError;
+                    return 0;
+                }
+                txt[idx] = b;
+                Strcpy(i - start + 1, text + start, b);
+                b[i - start + 1] = 0;
+                // printf("Text: %s\n", txt[idx]);
+                idx++;
+                clearNC:
+                    start = i + 1;
+                    continue;
+            s:
+                isStr = ~isStr;
+                if (isStr == 0) goto addp;
+                quote = a[0];
+                continue;
     }
     return 1;
 }
 void Type(char* type) {
-	for (INTSIZE i = 0; i < idx - 1; i++) {
+	for (INTSIZE i = 0; i < idx; i++) {
         if (IsKeyword(txt[i])) {
 		   type[i] = Keyword;
         }
-        else if (IsSep(txt[i])) {
-            type[i] = Separator;
-        }
-        else if (Isalpha(txt[i]) || txt[i][0] == '_' || txt[i][0] == '.') {
+        else if (Isalpha(txt[i]) || (txt[i][0] == '_' || txt[i][0] == '.' || txt[i][0] == '@' || txt[i][0] == '%')) {
             type[i] = Identifer;
         }
-        else if (Isnum(txt[i]) || IsReg(txt[i])) {
+        else if (IsSep(txt[i]) || txt[i][0] == '~') {
+            type[i] = Separator;
+        }
+        else if (Isnum(txt[i]) || IsReg(txt[i]) || (txt[i][0] == '"' || txt[i][0] == '\'')) {
             type[i] = Data;
         }
         else if (txt[i][0] == '\n') {
             type[i] = NewLine;
         }
+        else type[i] = Notype;
     }
 }

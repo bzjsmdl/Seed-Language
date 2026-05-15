@@ -1,0 +1,19 @@
+sec .text {
+	// int Strlen(const char* string)
+	pub _Strlen@4 {
+		push ebp;
+		esp => ebp;
+		push edi;
+		dword* ebp + 8 => edi;
+		eax ^ eax;
+		loc c:
+			cmp byte* edi + eax, 0;
+			je .return;
+			inc eax;
+			jmp .c;
+		loc return:
+			pop edi;
+			pop ebp;
+			ret 4;
+    }
+}
