@@ -67,14 +67,14 @@ int generate(char** txt) {
 				for (; type[j] != NewLine && !(Strequ(txt[j], "*") || Strequ(txt[j], ";")); j--);
 				// printf("txt[j - 1]: %s\ntxt[j]: %s\n", txt[j - 1], txt[j]);
 				if (isType(txt[j - 1])) {
-					fprintf(output, "mov %s [", txt[j - 1]);
+					fprintf(output, "mov %s, %s [", txt[i + 1], txt[j - 1]);
 					INTSIZE k = j + 1;
 					// printf("txt[k]: %s\n", txt[k]);
 					for (;k < idx && !Strequ(txt[k], "=>"); k++) {
 						// printf("txt[k]: %s\n", txt[k]);
 						fprintf(output, "%s", txt[k]);
 					}
-					fprintf(output, "], %s\n", txt[i + 1]);
+					fprintf(output, "]\n", txt[i + 1]);
 					i = k;
 				}
 				else if (isType(txt[i + 1])) {
@@ -94,7 +94,7 @@ int generate(char** txt) {
 				}
 			}
 		}
-		else if (Strequ(txt[i], "cmp")) {
+		else if (Strequ(txt[i], "cmp") || Strequ(txt[i], "test")) {
 			fprintf(output, "%s ", txt[i]);
 			if (isType(txt[i + 1])) {
 				fprintf(output, "%s [", txt[i + 1]);
@@ -123,7 +123,7 @@ int generate(char** txt) {
 					fprintf(output, "]\n");
 					i = k;
 				}
-				else fprintf(output, "%s %s\n", txt[i + 1], txt[i + 3]);
+				else fprintf(output, "%s, %s\n", txt[i + 1], txt[i + 3]);
 			}
 			i += 2;
 		}
@@ -136,7 +136,9 @@ int generate(char** txt) {
 			}
 			i += 2;
 		}
-		else if (Strequ(txt[i], "jmp") || Strequ(txt[i], "je") || Strequ(txt[i], "jne") || Strequ(txt[i], "loop") || Strequ(txt[i] ,"loopne") ||Strequ(txt[i] ,"loope")) {
+		else if (Strequ(txt[i], "jmp") || Strequ(txt[i], "je") || Strequ(txt[i], "jne") || Strequ(txt[i], "loop") || Strequ(txt[i] ,"loopne") ||Strequ(txt[i] ,"loope")\
+	    		|| Strequ(txt[i], "jl") || Strequ(txt[i], "jng") || Strequ(txt[i], "jg") || Strequ(txt[i], "jnl") || Strequ(txt[i], "jz") || Strequ(txt[i], "jnz") || Strequ(txt[i], "jna")\
+				|| Strequ(txt[i], "jnb") || Strequ(txt[i], "jb") || Strequ(txt[i], "ja")) {
 			if (isType(txt[i + 1])) {
 				fprintf(output, "%s %s [", txt[i], txt[i + 1]);
 				INTSIZE k = i + 3;
@@ -187,6 +189,13 @@ int generate(char** txt) {
 				else if (Strequ(txt[i], "qword")) fprintf(output, "movsq\n");
 				else if (Strequ(txt[i], "dword")) fprintf(output, "movsd\n");
 				else if (Strequ(txt[i], "word")) fprintf(output, "movsw\n");
+				i += 2;
+			}
+			else if (Strequ(txt[i - 1], "comp")) {
+				if (Strequ(txt[i], "byte")) fprintf(output, "cmpsb\n");
+				else if (Strequ(txt[i], "qword")) fprintf(output, "cmpsq\n");
+				else if (Strequ(txt[i], "dword")) fprintf(output, "cmpsd\n");
+				else if (Strequ(txt[i], "word")) fprintf(output, "cmpsw\n");
 				i += 2;
 			}
 			else if (Strequ(txt[i - 1], "write")) {

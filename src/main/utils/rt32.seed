@@ -1,0 +1,259 @@
+sec .text {
+	// int Strlen(const char* string)
+	pub _Strlen@4 {
+		push ebp;
+		esp => ebp;
+		push edi;
+		dword* ebp + 8 => edi;
+		eax ^ eax;
+		loc c:
+			cmp byte* edi + eax, 0;
+			je .return;
+			inc eax;
+			jmp .c;
+		loc return:
+			pop edi;
+			pop ebp;
+			ret 4;
+    }
+	// void Strcat(const char* src, char* dest);
+	pub _Strcat@8 {
+		push ebp;
+		esp => ebp;
+		push esi;
+		push edi;
+		dword* ebp + 8 => esi; // src
+		dword* ebp + 12 => edi; // dest
+
+		push esi;
+		call _Strlen@4;
+		edi + eax;
+		eax => ecx;
+
+		0 => df;
+		rep cpy byte;
+
+		pop edi;
+		pop esi;
+		pop ebp;
+		ret 8;
+    }
+	// int Isalpha(char* ch)
+	pub _Isalpha@4 {
+		push ebp;
+		esp => ebp;
+		push esi;
+		dword* ebp + 8 => esi;
+		byte* esi => al;
+		cmp al, 'A';
+		jl .false;
+		cmp al, 'Z';
+		jng .true;
+		cmp al, 'a';
+		jl .false;
+		cmp al, 'z';
+		jng .true;
+		loc false:
+			eax ^ eax;
+			jmp .return;
+		loc true:
+			1 => eax;	
+		loc return:
+			pop esi;
+			pop ebp;
+			ret 4;
+	}
+	// int Isnum(char* ch)
+	pub _Isnum@4 {
+		push ebp;
+		esp => ebp;
+		push esi;
+		dword* ebp + 8 => esi;
+		byte* esi => al;
+		cmp al, '0';
+		jl .false;
+		cmp al, '9';
+		jng .true;
+		loc false:
+			eax ^ eax;
+			jmp .return;
+		loc true:
+			1 => eax;
+		loc return:
+			pop esi;
+			pop ebp;
+			ret 4;
+	}
+	pub _Ispunct@4 {
+		push ebp;
+		esp => ebp;
+		push esi;
+		
+		byte* esi;
+		cmp al, '!';
+		jl .false;
+		cmp al, '/';
+		jng .true;
+		cmp al, ':';
+		jl .false;
+		cmp al, '@';
+		jng .true;
+		cmp al, '[';
+		jl .false;
+		cmp al, "`";
+		jng .true;
+		cmp al, '{';
+		jl .false;
+		cmp al, "~";
+		jng .true;
+		loc false:
+			eax ^ eax;
+			jmp .return;
+		loc true:
+			1 => eax;
+		loc return:
+			pop esi;
+			pop ebp;
+			ret 4;
+	}
+	// int Strequ(const char* str1, const char* str2)
+	pub _Strequ@8 {
+		push ebp;
+		esp => ebp;
+		push esi;
+		push edi;
+		push ecx;
+		dword* ebp + 8 => esi;
+		dword* ebp + 12 => edi;
+		test esi, esi;
+		je .false;
+		test edi, edi;
+		je .false;
+
+		push esi;
+		call _Strlen@4;
+		eax => ecx;
+
+		push edi;
+		call _Strlen@4;
+		cmp ecx, eax;
+		jne .false;
+		0 => df;
+		repe comp byte;
+		jne .false;
+		1 => eax;
+		jmp .return;
+		loc false:
+			eax ^ eax
+		loc return:
+			pop ecx;
+			pop edi;
+			pop esi;
+			pop ebp;
+			ret 8;
+	}
+	// ; void Strcpy(unsigned int length, const char* src, char* dest)
+	pub _Strcpy@12 {
+		push ebp;
+		esp => ebp;
+		push ecx;
+		push edi;
+		push esi;
+		dword* ebp + 8 => ecx;
+		dword* ebp + 12 => esi;
+		dword* ebp + 16 => edi;
+		0 => DF;
+		rep cpy byte;
+		pop esi;
+		pop edi;
+		pop ecx;
+		pop ebp;
+		ret 12;
+	}
+
+	// ; void Clear(void* ptr, unsigned int length)
+	pub _Clear@8 {
+		push ebp;
+		esp => ebp;
+		push edi;
+		push ecx;
+		push eax;
+		eax ^ eax;
+		0 => DF;
+		rep write byte;
+		pop eax;
+		pop ecx;
+		pop edi;
+		pop ebp;
+		ret 8;
+	}
+
+	// ; unsigned int Strchr(unsigned int count, char* chr, char* str, int direction)
+	pub _Strchr@16 {
+		push ebp;
+		esp => ebp;
+		push ecx;
+		push edi;
+		push ebx;
+		dword* ebp + 20 => ebx;
+		dword* ebp + 16 => edi;
+		dword* ebp + 12 => eax;
+		dword* ebp + 8 => ecx;
+		byte* eax => al;
+		cmp ebx, 0;
+		jne .nega;
+		0 => DF;
+		loc main:
+			rep find byte;
+			jne .err;
+			cmp ebx, 0;
+			jne .negaDI;
+			edi - 1;
+		loc t:
+			edi => eax;
+		loc return:
+			pop ebx;
+			pop edi;
+			pop ecx;
+			pop ebp;
+			ret 16;
+		loc err:
+			0 => eax;
+			jmp .return;
+		loc nega:
+			1 => DF;
+			jmp .main;
+		loc negaDI:
+			edi + 1;
+			jmp .t;
+	}
+
+	// ; int Memequ(unsigned int length, const char* str1, const char* str2)
+	pub _Memequ@12 {
+		push ebp;
+		esp => ebp;
+		push esi;
+		push edi;
+		push ecx;
+		dword* ebp + 8 => ecx;
+		dword* ebp + 12 => esi;
+		dword* ebp + 16 => edi;
+		cmp esi, 0;
+		je .false;
+		cmp edi, 0;
+		je .false;
+		0 => DF;
+		repe comp byte;
+		jne .false;
+		1 => eax;
+		jmp .return;
+		loc false:
+			0 => eax;
+		loc return:
+			pop ecx;
+			pop edi;
+			pop esi;
+			pop ebp;
+			ret 12;
+	}
+}

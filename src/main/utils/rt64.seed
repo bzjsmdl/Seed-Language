@@ -1,0 +1,202 @@
+sec .text {
+    // int Strlen(const char* string)
+    pub Strlen {
+        rax ^ rax;
+		loc c:
+			cmp byte* rcx + rax, 0;
+			je .return;
+			inc rax;
+			jmp .c;
+		loc return:
+			ret ~;
+    }
+    // void Strcat(const char* src, char* dest);
+	pub Strcat {
+		push rsi;
+		push rdi;
+		rcx => rsi; // src
+		rdx => rdi; // dest
+
+		call Strlen;
+		rdi + rax;
+		rax => rcx;
+
+		0 => df;
+		rep cpy byte;
+
+		pop rdi;
+		pop rsi;
+		ret ~;
+    }
+	// int Isalpha(char* ch)
+	pub Isalpha {
+		byte* rcx => al;
+		cmp al, 'A';
+		jl .false;
+		cmp al, 'Z';
+		jng .true;
+		cmp al, 'a';
+		jl .false;
+		cmp al, 'z';
+		jng .true;
+		loc false:
+			rax ^ rax;
+			jmp .return;
+		loc true:
+			1 => rax;	
+		loc return:
+			ret ~;
+	}
+	// int Isnum(char* ch)
+	pub Isnum {
+		byte* rcx => al;
+		cmp al, '0';
+		jl .false;
+		cmp al, '9';
+		jng .true;
+		loc false:
+			rax ^ rax;
+			jmp .return;
+		loc true:
+			1 => rax;
+		loc return:
+			ret ~;
+	}
+	pub Ispunct {
+		byte* rcx => al;
+		cmp al, '!';
+		jl .false;
+		cmp al, '/';
+		jng .true;
+		cmp al, ':';
+		jl .false;
+		cmp al, '@';
+		jng .true;
+		cmp al, '[';
+		jl .false;
+		cmp al, "`";
+		jng .true;
+		cmp al, '{';
+		jl .false;
+		cmp al, "~";
+		jng .true;
+		loc false:
+			rax ^ rax;
+			jmp .return;
+		loc true:
+			1 => rax;
+		loc return:
+			ret ~;
+	}
+	// int Strequ(const char* str1, const char* str2)
+	pub Strequ {
+		push rdi;
+		push rsi;
+		rcx => rsi;
+		rdx => rdi;
+		test rsi, rsi;
+		je .false;
+		test rdi, rdi;
+		je .false;
+
+		rsi => rcx;
+		call Strlen;
+		rax => rcx;
+		push rcx;
+
+		rdi => rcx;
+		call Strlen;
+		pop rcx;
+		cmp rcx, rax;
+		jne .false;
+		0 => df;
+		repe comp byte;
+		jne .false;
+		1 => rax;
+		jmp .return;
+		loc false:
+			rax ^ rax;
+		loc return:
+			pop rdi;
+			pop rsi;
+			ret ~;
+	}
+	// ; void Strcpy(unsigned int length, const char* src, char* dest)
+	pub Strcpy {
+		push rsi;
+		push rdi;
+		rdx => rsi;
+		r8 => rdi;
+		0 => DF;
+		rep cpy byte;
+		pop rdi;
+		pop rsi;
+		ret ~;
+	}
+
+	// ; void clear(unsigned int length, void* ptr)
+	pub clear {
+		push rdi;
+		push rax;
+		rdx => rdi;
+		rax ^ rax;
+		0 => DF;
+		rep write byte;
+		pop rax;
+		pop rdi;
+		ret ~;
+	}
+
+	// ; unsigned long long int Strchr(unsigned int count, char* chr, char* str, int direction)
+	pub Strchr {
+		push rdi;
+		byte* rdx => al;
+		r8 => rdi;
+		cmp r9, 0;
+		jne .nega;
+		0 => DF;
+		loc main:
+			repne find byte;
+			jne .err;
+			cmp r9, 0;
+			jne .negaDI;
+			rdi - 1;
+		loc t:
+			rdi => rax;
+		loc return:
+			pop rdi;
+			ret ~;
+		loc err:
+			0 => rax;
+			jmp .return;
+		loc nega:
+			1 => DF;
+			jmp .main;
+		loc negaDI:
+			rdi + 1;
+			jmp .t;
+	}
+
+	// ; int Memequ(unsigned long long int length, const char* str1, const char* str2)
+	pub Memequ {
+		push rsi;
+		push rdi;
+		rdx => rsi;
+		r8 => rdi;
+		cmp rsi, 0;
+		je .false;
+		cmp rdi, 0;
+		je .false;
+		0 => DF;
+		repe comp byte;
+		jne .false;
+		1 => rax;
+		jmp .return;
+		loc false:
+			0 => rax;
+		loc return:
+			pop rdi;
+			pop rsi;
+			ret ~;
+	}
+}

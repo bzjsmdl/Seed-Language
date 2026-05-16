@@ -84,12 +84,13 @@ void print(char* str, INTSIZE len) {
 }
 
 int IsKeyword(char* str) {
-	if (Strequ(str, "loc") || Strequ(str, "pop") || Strequ(str, "push") || Strequ(str, "call")) return 1;
+	if (Strequ(str, "loc") || Strequ(str, "pop") || Strequ(str, "push") || Strequ(str, "call") || Strequ(str, "jl") || Strequ(str, "jng") || Strequ(str, "test")) return 1;
 	else if (Strequ(str, "sec") || Strequ(str, "pub") || Strequ(str, "priv") || Strequ(str, "res") || Strequ(str, "inc") || Strequ(str, "dec")) return 1;
 	else if (Strequ(str ,"rep") || Strequ("cpy", str) || Strequ("ret", str) || Strequ(str, "jne") || Strequ(str ,"repe") || Strequ(str ,"repne")) return 1;
 	else if (Strequ(str, "nop") || Strequ(str, "je") || Strequ(str, "jmp") || Strequ(str, "loop") || Strequ(str, "cmp") || Strequ(str, "call")) return 1;
 	else if (Strequ(str, "byte") || Strequ(str, "word") || Strequ(str, "dword") || Strequ(str, "qword") || Strequ(str, "%%data") || Strequ(str, "getpd") || Strequ(str, "extern")) return 1;
 	else if (Strequ(str, "#macro") || Strequ(str ,"loope") ||Strequ(str ,"loopne") || Strequ(str, "cpy") || Strequ(str, "write") || Strequ(str, "read") || Strequ(str, "find") || Strequ(str, "putpd")) return 1;
+	else if (Strequ(str, "jg") || Strequ(str, "jnl") || Strequ(str, "comp") || Strequ(str, "jz") || Strequ(str, "jnz") || Strequ(str, "jna") || Strequ(str, "jnb") || Strequ(str, "jb") || Strequ(str, "ja")) return 1;
 	else return 0;
 }
 

@@ -16,6 +16,7 @@ int lexer(INTSIZE length, char* text) {
     for (INTSIZE i = 0; i < length; i++) {
         a[0] = text[i];
         a[1] = text[i + 1];
+        // printf("a[0]: %c, a[1]: %c\n", a[0], a[1]);
             if (isStr) {
                 if (a[0] == quote) goto s;
                 else if (a[0] == '\n' || i + 1 >= length) {
@@ -25,13 +26,17 @@ int lexer(INTSIZE length, char* text) {
                 continue;
             }
             else {
+               
                 if (a[0] == '\"' || a[0] == '\'') goto s;
-                else if (a[0] == '\n') {
-                    Line++;
-                    goto addp;
+                else if (a[0] < '!') {
+                    if (a[0] == '\n') {
+                        Line++;
+                        goto addp;
+                    }
+                    else goto clearNC;
                 }
-                else if (Isalpha(a)) {
-                    if (Isalpha(a + 1) || Isnum(a + 1) || a[1] == '_' || a[1] == '.' || a[1] == '@' || a[1] == '%') continue;
+                else if (Isalpha(a) || a[0] == '@' || a[0] == '%' ||  a[0] == '_' || a[0] == '.') {
+                    if (Isalpha(a + 1) || Isnum(a + 1) || a[1] == '_' || a[1] == '.' || a[1] == '@' || Isnum(a + 1)) continue;
                     else goto addp;
                 }
                 else if (Isnum(a)) {
@@ -39,8 +44,8 @@ int lexer(INTSIZE length, char* text) {
                     else goto addp;
                 }
                 else if (Ispunct(a)) {
-                    if (a[1] == '*' || a[0] == '*') goto addp;
-                    else if (Isalpha(a + 1) || (Ispunct(a + 1) && a[1] != ';') || Isnum(a + 1)) continue;
+                    if (a[0] == '*' || a[0] == '{' || a[0] == '}' || a[0] == ',' || a[0] == ';') goto addp;
+                    else if (Ispunct(a + 1) && a[1] != ';') continue;
                     else goto addp;
                 }
                 else goto clearNC;
